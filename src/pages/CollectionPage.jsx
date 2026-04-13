@@ -34,7 +34,7 @@ function formatPrice(amount, currencyCode = 'INR') {
   }).format(Number(amount))
 }
 
-// ── Filter Drawer (mobile) + Sidebar (desktop) ──
+// ── Filter Drawer (mobile) + Sidebar (desktop) — Premium look ──
 function FilterPanel({ filters, activeFilters, onToggle, onClearAll, filterOpen, setFilterOpen }) {
   const activeCount = activeFilters.length
 
@@ -43,37 +43,41 @@ function FilterPanel({ filters, activeFilters, onToggle, onClearAll, filterOpen,
       {/* Mobile filter drawer */}
       <div className={`fixed inset-0 z-50 lg:hidden ${filterOpen ? '' : 'pointer-events-none'}`}>
         <div
-          className={`absolute inset-0 bg-black/50 transition-opacity duration-300 ${filterOpen ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300 ${filterOpen ? 'opacity-100' : 'opacity-0'}`}
           onClick={() => setFilterOpen(false)}
         />
         <div className={`absolute left-0 top-0 bottom-0 w-[85%] max-w-sm bg-white flex flex-col shadow-2xl transition-transform duration-300 ease-out ${filterOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-          <div className="flex items-center justify-between px-5 py-4 border-b border-charcoal/10">
-            <h3 className="text-xs tracking-[0.25em] uppercase font-medium text-charcoal">
-              Filters {activeCount > 0 && <span className="text-gold ml-1">({activeCount})</span>}
+          {/* Header */}
+          <div className="flex items-center justify-between px-6 py-5 border-b border-charcoal/8">
+            <h3 className="font-serif text-lg text-charcoal font-light">
+              Filters
+              {activeCount > 0 && <span className="text-gold text-sm ml-2">({activeCount})</span>}
             </h3>
-            <button onClick={() => setFilterOpen(false)} className="text-charcoal/50 hover:text-charcoal">
+            <button onClick={() => setFilterOpen(false)} className="text-charcoal/40 hover:text-charcoal transition-colors">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto px-5 py-4">
+          {/* Filter sections */}
+          <div className="flex-1 overflow-y-auto px-6 py-2">
             <FilterSections filters={filters} activeFilters={activeFilters} onToggle={onToggle} />
           </div>
 
-          <div className="border-t border-charcoal/10 px-5 py-4 flex gap-3">
+          {/* Footer */}
+          <div className="border-t border-charcoal/8 px-6 py-4 flex gap-3">
             {activeCount > 0 && (
               <button
                 onClick={onClearAll}
-                className="flex-1 border border-charcoal/20 text-charcoal text-xs tracking-[0.2em] uppercase py-3 hover:border-charcoal transition-colors"
+                className="flex-1 border border-charcoal/20 text-charcoal text-[10px] tracking-[0.2em] uppercase py-3 hover:border-charcoal transition-colors font-light"
               >
                 Clear All
               </button>
             )}
             <button
               onClick={() => setFilterOpen(false)}
-              className="flex-1 bg-gold text-white text-xs tracking-[0.2em] uppercase py-3"
+              className="flex-1 bg-gold text-white text-[10px] tracking-[0.2em] uppercase py-3 font-medium"
             >
               Show Results
             </button>
@@ -81,17 +85,17 @@ function FilterPanel({ filters, activeFilters, onToggle, onClearAll, filterOpen,
         </div>
       </div>
 
-      {/* Desktop sidebar — always visible */}
-      <div className="hidden lg:block w-64 flex-shrink-0">
+      {/* Desktop sidebar */}
+      <div className="hidden lg:block w-60 flex-shrink-0">
         <div className="sticky top-20">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xs tracking-[0.25em] uppercase font-medium text-charcoal">Filters</h3>
+          <div className="flex items-center justify-between mb-4 pb-4 border-b border-charcoal/8">
+            <h3 className="font-serif text-lg text-charcoal font-light">Filters</h3>
             {activeCount > 0 && (
               <button
                 onClick={onClearAll}
-                className="text-[10px] tracking-wider uppercase text-gold hover:text-charcoal transition-colors"
+                className="text-[10px] tracking-wider uppercase text-gold hover:text-charcoal transition-colors font-light"
               >
-                Clear All ({activeCount})
+                Clear ({activeCount})
               </button>
             )}
           </div>
@@ -102,76 +106,82 @@ function FilterPanel({ filters, activeFilters, onToggle, onClearAll, filterOpen,
   )
 }
 
-// ── Filter sections rendering ──
+// ── Filter sections — premium styling ──
 function FilterSections({ filters, activeFilters, onToggle }) {
   const [openSections, setOpenSections] = useState({})
-
   const toggle = (id) => setOpenSections(prev => ({ ...prev, [id]: !prev[id] }))
 
-  // Sirf ye 3 filters dikhao — baaki hide
-  const ALLOWED = ['price', 'size', 'product type']
+  const ALLOWED = ['price', 'size', 'product type', 'item type']
   const visibleFilters = filters.filter(f =>
     ALLOWED.some(a => f.label.toLowerCase().includes(a))
   )
 
   return (
-    <div className="space-y-0">
+    <div>
       {visibleFilters.map(filter => {
-        const isOpen = openSections[filter.id] !== false // default open
+        const isOpen = openSections[filter.id] !== false
         const isPriceRange = filter.type === 'PRICE_RANGE'
 
         return (
-          <div key={filter.id} className="border-b border-charcoal/8">
+          <div key={filter.id} className="border-b border-charcoal/6 last:border-0">
+            {/* Section header — chevron left, label right (like live site) */}
             <button
               onClick={() => toggle(filter.id)}
-              className="w-full flex items-center justify-between py-4 text-left group"
+              className="w-full flex items-center gap-2 py-5 text-left group"
             >
-              <span className="text-xs tracking-[0.15em] uppercase font-medium text-charcoal group-hover:text-gold transition-colors">
-                {filter.label}
-              </span>
               <svg
-                className={`w-3.5 h-3.5 text-charcoal/40 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-                fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}
+                className={`w-3 h-3 text-charcoal/40 transition-transform duration-200 flex-shrink-0 ${isOpen ? '' : '-rotate-90'}`}
+                fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
               </svg>
+              <span className="text-[13px] tracking-[0.08em] uppercase font-medium text-charcoal/80 group-hover:text-charcoal transition-colors">
+                {filter.label}
+              </span>
             </button>
 
-            {isOpen && (
-              <div className="pb-4">
-                {isPriceRange ? (
-                  <PriceRangeFilter filter={filter} activeFilters={activeFilters} onToggle={onToggle} />
-                ) : (
-                  <div className="space-y-1 max-h-52 overflow-y-auto">
-                    {filter.values.map(val => {
-                      const isActive = activeFilters.some(
-                        af => af.filterId === filter.id && af.valueId === val.id
-                      )
-                      return (
-                        <label
-                          key={val.id}
-                          className="flex items-center gap-3 py-1.5 cursor-pointer group/item"
-                        >
-                          <span className={`w-4 h-4 border flex items-center justify-center transition-all ${
-                            isActive ? 'bg-gold border-gold' : 'border-charcoal/25 group-hover/item:border-gold'
-                          }`}>
-                            {isActive && (
-                              <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                              </svg>
-                            )}
-                          </span>
-                          <span className={`text-xs font-light transition-colors ${isActive ? 'text-charcoal font-normal' : 'text-charcoal/70 group-hover/item:text-charcoal'}`}>
-                            {val.label}
-                          </span>
-                          <span className="text-[10px] text-charcoal/30 ml-auto">{val.count}</span>
-                        </label>
-                      )
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
+            {/* Content */}
+            <div className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-[500px] pb-5' : 'max-h-0'}`}>
+              {isPriceRange ? (
+                <PriceSliderFilter filter={filter} activeFilters={activeFilters} onToggle={onToggle} />
+              ) : (
+                <div className="space-y-0.5 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+                  {filter.values.map(val => {
+                    const isActive = activeFilters.some(
+                      af => af.filterId === filter.id && af.valueId === val.id
+                    )
+                    return (
+                      <label
+                        key={val.id}
+                        className="flex items-center gap-3 py-2 cursor-pointer group/item"
+                        onClick={() => onToggle(filter.id, val.id)}
+                      >
+                        {/* Custom checkbox */}
+                        <span className={`w-[18px] h-[18px] rounded-sm border-[1.5px] flex items-center justify-center transition-all flex-shrink-0 ${
+                          isActive
+                            ? 'bg-gold border-gold'
+                            : 'border-charcoal/20 group-hover/item:border-gold/60'
+                        }`}>
+                          {isActive && (
+                            <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                            </svg>
+                          )}
+                        </span>
+                        <span className={`text-[13px] transition-colors flex-1 ${
+                          isActive ? 'text-charcoal font-normal' : 'text-charcoal/60 font-light group-hover/item:text-charcoal/80'
+                        }`}>
+                          {val.label}
+                        </span>
+                        <span className="text-[11px] text-charcoal/25 font-light tabular-nums">
+                          ({val.count})
+                        </span>
+                      </label>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
           </div>
         )
       })}
@@ -179,45 +189,99 @@ function FilterSections({ filters, activeFilters, onToggle }) {
   )
 }
 
-// ── Price range filter ──
-function PriceRangeFilter({ filter, activeFilters, onToggle }) {
+// ── Premium Price Slider + Input ──
+function PriceSliderFilter({ filter, activeFilters, onToggle }) {
   const priceFilter = activeFilters.find(af => af.filterId === filter.id)
   const currentInput = priceFilter ? JSON.parse(priceFilter.input) : null
-  const [min, setMin] = useState(currentInput?.price?.min || '')
-  const [max, setMax] = useState(currentInput?.price?.max || '')
 
-  const apply = () => {
-    const input = { price: {} }
-    if (min) input.price.min = Number(min)
-    if (max) input.price.max = Number(max)
-    if (min || max) {
-      onToggle(filter.id, 'price-range', JSON.stringify(input), true)
-    }
+  const PRICE_MIN = 0
+  const PRICE_MAX = 25000
+  const STEP = 100
+
+  const [min, setMin] = useState(currentInput?.price?.min || PRICE_MIN)
+  const [max, setMax] = useState(currentInput?.price?.max || PRICE_MAX)
+
+  const apply = (newMin, newMax) => {
+    const input = { price: { min: Number(newMin), max: Number(newMax) } }
+    onToggle(filter.id, 'price-range', JSON.stringify(input), true)
   }
 
+  const handleMinSlider = (e) => {
+    const val = Math.min(Number(e.target.value), max - STEP)
+    setMin(val)
+  }
+
+  const handleMaxSlider = (e) => {
+    const val = Math.max(Number(e.target.value), min + STEP)
+    setMax(val)
+  }
+
+  const handleMouseUp = () => apply(min, max)
+
+  const minPercent = ((min - PRICE_MIN) / (PRICE_MAX - PRICE_MIN)) * 100
+  const maxPercent = ((max - PRICE_MIN) / (PRICE_MAX - PRICE_MIN)) * 100
+
   return (
-    <div className="flex items-center gap-2">
-      <input
-        type="number"
-        placeholder="₹ Min"
-        value={min}
-        onChange={e => setMin(e.target.value)}
-        className="flex-1 px-3 py-2 text-xs border border-charcoal/15 focus:outline-none focus:border-gold font-light w-0"
-      />
-      <span className="text-charcoal/30 text-xs">—</span>
-      <input
-        type="number"
-        placeholder="₹ Max"
-        value={max}
-        onChange={e => setMax(e.target.value)}
-        className="flex-1 px-3 py-2 text-xs border border-charcoal/15 focus:outline-none focus:border-gold font-light w-0"
-      />
-      <button
-        onClick={apply}
-        className="px-3 py-2 bg-gold text-white text-xs hover:brightness-90 transition-all"
-      >
-        Go
-      </button>
+    <div>
+      {/* Price display */}
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center gap-1">
+          <span className="text-[11px] text-charcoal/40 font-light">₹</span>
+          <input
+            type="number"
+            value={min}
+            onChange={e => setMin(Number(e.target.value))}
+            onBlur={() => apply(min, max)}
+            className="w-16 text-xs text-charcoal font-medium border-b border-charcoal/15 pb-1 focus:outline-none focus:border-gold text-center bg-transparent"
+          />
+        </div>
+        <span className="text-charcoal/20 text-xs mx-2">—</span>
+        <div className="flex items-center gap-1">
+          <span className="text-[11px] text-charcoal/40 font-light">₹</span>
+          <input
+            type="number"
+            value={max}
+            onChange={e => setMax(Number(e.target.value))}
+            onBlur={() => apply(min, max)}
+            className="w-16 text-xs text-charcoal font-medium border-b border-charcoal/15 pb-1 focus:outline-none focus:border-gold text-center bg-transparent"
+          />
+        </div>
+      </div>
+
+      {/* Dual range slider */}
+      <div className="relative h-1 mb-3">
+        {/* Track background */}
+        <div className="absolute inset-0 bg-charcoal/10 rounded-full" />
+        {/* Active range */}
+        <div
+          className="absolute top-0 bottom-0 bg-gold rounded-full"
+          style={{ left: `${minPercent}%`, right: `${100 - maxPercent}%` }}
+        />
+        {/* Min slider */}
+        <input
+          type="range"
+          min={PRICE_MIN}
+          max={PRICE_MAX}
+          step={STEP}
+          value={min}
+          onChange={handleMinSlider}
+          onMouseUp={handleMouseUp}
+          onTouchEnd={handleMouseUp}
+          className="absolute inset-0 w-full appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-gold [&::-webkit-slider-thumb]:shadow-sm [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:relative [&::-webkit-slider-thumb]:z-10"
+        />
+        {/* Max slider */}
+        <input
+          type="range"
+          min={PRICE_MIN}
+          max={PRICE_MAX}
+          step={STEP}
+          value={max}
+          onChange={handleMaxSlider}
+          onMouseUp={handleMouseUp}
+          onTouchEnd={handleMouseUp}
+          className="absolute inset-0 w-full appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-gold [&::-webkit-slider-thumb]:shadow-sm [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:relative [&::-webkit-slider-thumb]:z-10"
+        />
+      </div>
     </div>
   )
 }
