@@ -64,19 +64,18 @@ export default function CategoryGrid() {
   }
 
   return (
-    <section className="py-10 px-4 sm:px-6 lg:px-8 max-w-8xl mx-auto">
+    <section className="py-6 lg:py-12 px-3 sm:px-6 lg:px-8 max-w-8xl mx-auto">
 
       {/* Section header */}
-      <div className="text-center mb-12">
-        <h2 className="font-serif text-3xl lg:text-3xl font-light text-charcoal uppercase">
+      <div className="text-center mb-5 lg:mb-10">
+        <h2 className="font-serif text-xl lg:text-3xl font-light text-charcoal uppercase">
           Shop by Category
         </h2>
       </div>
 
-      {/* Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3 lg:gap-4">
+      {/* Grid — mobile pe compact cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-2 lg:gap-4">
         {collections.map((col, i) => {
-          // Image priority: collection image → first product image → gradient fallback
           const collectionImg = col.image?.url
           const productImg    = col.products?.nodes?.[0]?.featuredImage?.url
           const imgUrl        = collectionImg || productImg
@@ -88,33 +87,28 @@ export default function CategoryGrid() {
           <Link
             key={col.id}
             to={`/collections/${col.handle}`}
-            className="group relative overflow-hidden block"
-            style={{ height: '420px' }}
+            className="group relative overflow-hidden block aspect-[3/4] lg:aspect-[3/5]"
           >
-            {/* Background — image (collection ya product) ya gradient */}
             {imgUrl ? (
               <img
                 src={imgUrl}
                 alt={imgAlt}
-                className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-[900ms] ease-out group-hover:scale-110"
+                className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
               />
             ) : (
               <div
-                className="absolute inset-0 transition-transform duration-[900ms] ease-out group-hover:scale-110"
+                className="absolute inset-0 transition-transform duration-700 group-hover:scale-105"
                 style={{ background: GRADIENTS[i % GRADIENTS.length] }}
               />
             )}
 
-            {/* Dark gradient overlay — neeche darker for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/10 group-hover:from-black/80 transition-all duration-500" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
 
-            {/* Centered content — title + SHOP NOW button */}
-            <div className="absolute inset-0 flex flex-col items-center justify-end pb-10 px-4">
-              <h3 className="uppercase font-serif text-2xl lg:text-2xl text-white font-light tracking-wide text-center mb-5 drop-shadow-md">
+            <div className="absolute inset-0 flex flex-col items-center justify-end pb-5 lg:pb-8 px-2 lg:px-4">
+              <h3 className="uppercase font-serif text-sm lg:text-xl text-white font-light tracking-wide text-center mb-2 lg:mb-4 drop-shadow-md">
                 {col.title}
               </h3>
-
-              <span className="inline-block px-7 py-2.5 bg-white text-charcoal text-[11px] tracking-[0.22em] uppercase font-medium group-hover:bg-gold group-hover:text-white transition-all duration-300">
+              <span className="inline-block px-4 lg:px-7 py-1.5 lg:py-2.5 bg-white text-charcoal text-[9px] lg:text-[11px] tracking-[0.18em] lg:tracking-[0.22em] uppercase font-medium group-hover:bg-gold group-hover:text-white transition-all duration-300">
                 Shop Now
               </span>
             </div>

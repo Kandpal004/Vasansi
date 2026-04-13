@@ -152,29 +152,29 @@ export default function FeaturedProducts() {
   }, [])
 
   return (
-    <section className="py-20 bg-cream">
-      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-6 lg:py-14 bg-cream">
+      <div className="max-w-8xl mx-auto px-3 sm:px-6 lg:px-8">
 
         {/* Section header */}
-        <div className="text-center mb-12">
-          <h2 className="font-serif text-3xl lg:text-4xl font-light text-charcoal uppercase tracking-wide">
+        <div className="text-center mb-5 lg:mb-10">
+          <h2 className="font-serif text-xl lg:text-3xl font-light text-charcoal uppercase tracking-wide">
             Shop All
           </h2>
         </div>
 
-        {/* Products grid — 4 columns × 2 rows = 8 products */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+        {/* Products grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-6">
           {loading
             ? [...Array(PRODUCTS_TO_SHOW)].map((_, i) => <SkeletonCard key={i} />)
             : products.map(p => <ProductCard key={p.id} product={p} />)
           }
         </div>
 
-        {/* VIEW ALL button — centered, gold, prominent */}
-        <div className="text-center mt-14">
+        {/* VIEW ALL button */}
+        <div className="text-center mt-8 lg:mt-14">
           <a
             href={`/collections/${COLLECTION_HANDLE}`}
-            className="inline-block bg-gold text-white text-xs tracking-[0.25em] uppercase font-medium px-12 py-4 hover:bg-charcoal transition-all duration-300"
+            className="inline-block bg-gold text-white text-[10px] lg:text-xs tracking-[0.25em] uppercase font-medium px-8 lg:px-12 py-3 lg:py-4 hover:bg-charcoal transition-all duration-300"
           >
             View All
           </a>

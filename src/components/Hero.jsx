@@ -44,7 +44,7 @@ export default function Hero() {
   const headingLines = heading.split('\n')
 
   return (
-    <section className="relative h-screen min-h-[640px] flex items-center justify-center overflow-hidden">
+    <section className="relative h-[70vh] lg:h-screen min-h-[400px] lg:min-h-[640px] flex items-center justify-center overflow-hidden">
 
       {/* ── Loading background — #ac7783 — jab tak image nahi aati ── */}
       <div
@@ -81,10 +81,10 @@ export default function Hero() {
       {/* ── Content — hamesha visible, koi flash nahi ── */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
       
-      <p className="animate-fade-up-2 text-base lg:text-lg font-light tracking-wide max-w-md text-white mx-auto mb-1  leading-relaxed uppercase">
+      <p className="animate-fade-up-2 text-sm lg:text-lg font-light tracking-wide max-w-md text-white mx-auto mb-1 leading-relaxed uppercase">
           {subtext}
         </p>
-        <h1 className="animate-fade-up-1 font-serif text-5xl sm:text-6xl lg:text-8xl font-light text-white leading-[1.05] mb-8 uppercase">
+        <h1 className="animate-fade-up-1 font-serif text-3xl sm:text-5xl lg:text-8xl font-light text-white leading-[1.05] mb-6 lg:mb-8 uppercase">
           {headingLines.map((line, i) => (
             <span key={i}>
               {line}
