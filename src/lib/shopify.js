@@ -266,7 +266,7 @@ export const RELATED_PRODUCTS_QUERY = `
 // ── Collection Page — full collection with paginated products ──
 // Pagination cursor based — `after` pass karo "Load More" ke liye
 export const COLLECTION_PAGE_QUERY = `
-  query CollectionPage($handle: String!, $first: Int!, $after: String, $sortKey: ProductCollectionSortKeys, $reverse: Boolean) {
+  query CollectionPage($handle: String!, $first: Int!, $after: String, $sortKey: ProductCollectionSortKeys, $reverse: Boolean, $filters: [ProductFilter!]) {
     collection(handle: $handle) {
       id
       title
@@ -275,7 +275,18 @@ export const COLLECTION_PAGE_QUERY = `
         url(transform: { maxWidth: 2000, maxHeight: 800, crop: CENTER })
         altText
       }
-      products(first: $first, after: $after, sortKey: $sortKey, reverse: $reverse) {
+      products(first: $first, after: $after, sortKey: $sortKey, reverse: $reverse, filters: $filters) {
+        filters {
+          id
+          label
+          type
+          values {
+            id
+            label
+            count
+            input
+          }
+        }
         pageInfo {
           hasNextPage
           endCursor
