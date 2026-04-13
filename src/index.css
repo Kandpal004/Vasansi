@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Proza Libre', 'Jost', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #0F0D1A;
+  }
+}
+
+@layer utilities {
+  .animate-marquee {
+    animation: marquee 40s linear infinite;
+    width: max-content;
+    display: flex;
+  }
+
+  .animate-fade-up {
+    animation: fadeUp 0.9s ease-out forwards;
+  }
+
+  .animate-fade-up-1 {
+    animation: fadeUp 0.9s ease-out 0.15s forwards;
+    opacity: 0;
+  }
+
+  .animate-fade-up-2 {
+    animation: fadeUp 0.9s ease-out 0.3s forwards;
+    opacity: 0;
+  }
+
+  .animate-fade-up-3 {
+    animation: fadeUp 0.9s ease-out 0.5s forwards;
+    opacity: 0;
+  }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #810621; border-radius: 2px; }
