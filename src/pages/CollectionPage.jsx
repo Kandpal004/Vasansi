@@ -108,9 +108,10 @@ function FilterSections({ filters, activeFilters, onToggle }) {
 
   const toggle = (id) => setOpenSections(prev => ({ ...prev, [id]: !prev[id] }))
 
-  // Skip internal Shopify filters
+  // Sirf ye 3 filters dikhao — baaki hide
+  const ALLOWED = ['price', 'size', 'product type']
   const visibleFilters = filters.filter(f =>
-    f.values.length > 1 && !f.label.toLowerCase().includes('product metafield')
+    ALLOWED.some(a => f.label.toLowerCase().includes(a))
   )
 
   return (
