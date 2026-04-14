@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { shopifyFetch, PRODUCT_QUERY, RELATED_PRODUCTS_QUERY } from '../lib/shopify'
 import { useCart } from '../lib/CartContext'
@@ -75,6 +75,125 @@ function RelatedCard({ product }) {
         </div>
       </div>
     </Link>
+  )
+}
+
+// ── Image Gallery with Touch Swipe + Thumbnails ──
+function ImageGallery({ images, activeImg, setActiveImg, hasDiscount, discount, title }) {
+  const touchRef = useRef({ startX: 0, startY: 0, isDragging: false })
+  const containerRef = useRef(null)
+  const thumbContainerRef = useRef(null)
+
+  const goTo = useCallback((idx) => {
+    const nextIdx = (idx + images.length) % images.length
+    setActiveImg(nextIdx)
+  }, [images.length, setActiveImg])
+
+  // Touch handlers
+  const onTouchStart = (e) => {
+    touchRef.current.startX = e.touches[0].clientX
+    touchRef.current.startY = e.touches[0].clientY
+    touchRef.current.isDragging = true
+  }
+
+  const onTouchEnd = (e) => {
+    if (!touchRef.current.isDragging) return
+    const endX = e.changedTouches[0].clientX
+    const endY = e.changedTouches[0].clientY
+    const diffX = touchRef.current.startX - endX
+    const diffY = Math.abs(touchRef.current.startY - endY)
+
+    // Horizontal swipe check (minimum 50px, more horizontal than vertical)
+    if (Math.abs(diffX) > 50 && diffX > diffY) {
+      if (diffX > 0) goTo(activeImg + 1)  // swipe left → next
+      else goTo(activeImg - 1)             // swipe right → prev
+    }
+    touchRef.current.isDragging = false
+  }
+
+  // Auto-scroll thumbnail into view
+  useEffect(() => {
+    if (thumbContainerRef.current) {
+      const thumb = thumbContainerRef.current.children[activeImg]
+      if (thumb) {
+        thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+      }
+    }
+  }, [activeImg])
+
+  return (
+    <div className="lg:col-span-7">
+      {/* Main image — swipeable */}
+      <div
+        ref={containerRef}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+        className="relative bg-cream overflow-hidden aspect-[4/5] mb-2 lg:mb-3 cursor-grab active:cursor-grabbing select-none"
+      >
+        <img
+          key={activeImg}
+          src={images[activeImg]?.url}
+          alt={images[activeImg]?.altText || title}
+          className="absolute inset-0 w-full h-full object-cover object-top"
+          draggable={false}
+          style={{ animation: 'fadeIn 0.25s ease-out' }}
+        />
+
+        {/* Discount badge */}
+        {hasDiscount && (
+          <span className="absolute top-3 left-3 lg:top-4 lg:left-4 bg-gold text-white text-[10px] lg:text-xs tracking-wider px-3 py-1 rounded-full font-light shadow-sm">
+            {discount}% Off
+          </span>
+        )}
+
+        {/* Navigation arrows */}
+        {images.length > 1 && (
+          <>
+            <button
+              onClick={() => goTo(activeImg - 1)}
+              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 lg:w-10 lg:h-10 bg-white/80 hover:bg-white flex items-center justify-center text-charcoal/60 hover:text-charcoal transition-all shadow-sm"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>
+            </button>
+            <button
+              onClick={() => goTo(activeImg + 1)}
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 lg:w-10 lg:h-10 bg-white/80 hover:bg-white flex items-center justify-center text-charcoal/60 hover:text-charcoal transition-all shadow-sm"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
+            </button>
+          </>
+        )}
+
+        {/* Image counter */}
+        {images.length > 1 && (
+          <span className="absolute bottom-3 right-3 bg-black/40 text-white text-[10px] tracking-wider px-2 py-1 rounded-sm font-light">
+            {activeImg + 1} / {images.length}
+          </span>
+        )}
+      </div>
+
+      {/* Thumbnails — mobile (horizontal scroll) + desktop (grid) */}
+      {images.length > 1 && (
+        <div
+          ref={thumbContainerRef}
+          className="flex lg:grid lg:grid-cols-6 gap-1.5 lg:gap-2 overflow-x-auto pb-1 lg:pb-0 scrollbar-hide"
+        >
+          {images.map((img, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveImg(i)}
+              className={`relative flex-shrink-0 w-14 h-16 lg:w-auto lg:h-auto bg-cream overflow-hidden transition-all duration-200 aspect-square ${
+                activeImg === i
+                  ? 'ring-2 ring-gold ring-offset-1 opacity-100'
+                  : 'opacity-40 hover:opacity-80'
+              }`}
+            >
+              <img src={img.url} alt="" className="absolute inset-0 w-full h-full object-cover" draggable={false} />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -193,64 +312,15 @@ export default function ProductPage() {
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12">
 
-          {/* ═══════ LEFT — Image Gallery ═══════ */}
-          <div className="lg:col-span-7">
-            {/* Main image */}
-            <div className="relative bg-cream overflow-hidden aspect-[4/5] mb-2 lg:mb-3">
-              <img
-                key={activeImg}
-                src={images[activeImg]?.url}
-                alt={images[activeImg]?.altText || product.title}
-                className="absolute inset-0 w-full h-full object-cover object-top animate-fade-up"
-              />
-              {/* Discount badge */}
-              {hasDiscount && (
-                <span className="absolute top-3 left-3 lg:top-4 lg:left-4 bg-gold text-white text-[10px] lg:text-xs tracking-wider px-3 py-1 rounded-full font-light shadow-sm">
-                  {discount}% Off
-                </span>
-              )}
-              {/* Navigation arrows */}
-              {images.length > 1 && (
-                <>
-                  <button
-                    onClick={() => setActiveImg(i => (i - 1 + images.length) % images.length)}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 lg:w-10 lg:h-10 bg-white/80 hover:bg-white flex items-center justify-center text-charcoal/60 hover:text-charcoal transition-all shadow-sm"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>
-                  </button>
-                  <button
-                    onClick={() => setActiveImg(i => (i + 1) % images.length)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 lg:w-10 lg:h-10 bg-white/80 hover:bg-white flex items-center justify-center text-charcoal/60 hover:text-charcoal transition-all shadow-sm"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
-                  </button>
-                  {/* Dot indicators (mobile) */}
-                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 lg:hidden">
-                    {images.map((_, i) => (
-                      <button key={i} onClick={() => setActiveImg(i)} className={`w-1.5 h-1.5 rounded-full transition-all ${activeImg === i ? 'bg-gold w-4' : 'bg-white/70'}`} />
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-
-            {/* Thumbnails — desktop only */}
-            {images.length > 1 && (
-              <div className="hidden lg:grid grid-cols-6 gap-2">
-                {images.map((img, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setActiveImg(i)}
-                    className={`relative bg-cream overflow-hidden aspect-square transition-all duration-200 ${
-                      activeImg === i ? 'ring-2 ring-gold ring-offset-1' : 'opacity-50 hover:opacity-90'
-                    }`}
-                  >
-                    <img src={img.url} alt="" className="absolute inset-0 w-full h-full object-cover" />
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+          {/* ═══════ LEFT — Image Gallery with Touch Swipe ═══════ */}
+          <ImageGallery
+            images={images}
+            activeImg={activeImg}
+            setActiveImg={setActiveImg}
+            hasDiscount={hasDiscount}
+            discount={discount}
+            title={product.title}
+          />
 
           {/* ═══════ RIGHT — Product Info ═══════ */}
           <div className="lg:col-span-5 lg:sticky lg:top-20 lg:self-start py-1 lg:py-2">
