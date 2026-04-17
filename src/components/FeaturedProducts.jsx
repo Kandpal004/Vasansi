@@ -106,7 +106,7 @@ function ProductCard({ product }) {
             </span>
           )}
           {hasDiscount && (
-            <span className="text-charcoal/40 text-sm line-through font-light">
+            <span className="text-charcoal text-sm line-through font-light">
               {formatPrice(compareAt.amount, compareAt.currencyCode)}
             </span>
           )}

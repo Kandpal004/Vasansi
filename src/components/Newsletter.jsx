@@ -23,13 +23,13 @@ export default function Newsletter() {
         </div>
 
         {/* Heading */}
-        <p className="text-xs tracking-[0.3em] uppercase text-charcoal/40 font-light mb-4">
+        <p className="text-xs tracking-[0.3em] uppercase text-charcoal font-light mb-4">
           Stay Connected
         </p>
         <h2 className="font-serif text-3xl lg:text-5xl font-light text-charcoal mb-4">
           Join the Vasansi Family
         </h2>
-        <p className="text-charcoal/55 text-sm font-light leading-relaxed mb-10">
+        <p className="text-charcoal text-sm font-light leading-relaxed mb-10">
           Subscribe to receive exclusive offers, new arrival previews, style inspiration, and members-only discounts.
           No spam, ever.
         </p>
@@ -55,7 +55,7 @@ export default function Newsletter() {
         ) : (
           <div className="py-6 text-center">
             <p className="font-serif text-2xl text-charcoal font-light mb-2">Welcome to the family! ✨</p>
-            <p className="text-charcoal/50 text-sm font-light">
+            <p className="text-charcoal text-sm font-light">
               Thank you for subscribing. Check your inbox for a welcome gift.
             </p>
           </div>
@@ -63,7 +63,7 @@ export default function Newsletter() {
 
         {/* Privacy note */}
         {!submitted && (
-          <p className="mt-4 text-charcoal/30 text-xs font-light tracking-wide">
+          <p className="mt-4 text-charcoal text-xs font-light tracking-wide">
             By subscribing, you agree to our Privacy Policy. Unsubscribe anytime.
           </p>
         )}

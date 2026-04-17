@@ -44,7 +44,7 @@ export default function BrandValues() {
 
         {/* Section header */}
         <div className="text-center mb-16">
-          <p className="text-xs tracking-[0.3em] uppercase text-charcoal/40 font-light mb-3">
+          <p className="text-xs tracking-[0.3em] uppercase text-charcoal font-light mb-3">
             Our Promise
           </p>
           <h2 className="font-serif text-3xl lg:text-4xl font-light text-charcoal">
@@ -67,7 +67,7 @@ export default function BrandValues() {
               </h3>
 
               {/* Description */}
-              <p className="text-charcoal/55 text-sm leading-relaxed font-light">
+              <p className="text-charcoal text-sm leading-relaxed font-light">
                 {value.description}
               </p>
             </div>

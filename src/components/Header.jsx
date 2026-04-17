@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { shopifyFetch, MAIN_MENU_QUERY, toRelativeUrl } from '../lib/shopify'
 import { useCart } from '../lib/CartContext'
+import SearchDrawer from './SearchDrawer'
 
 // Shopify menu handle — agar tumne naam change kiya hai to yahan update karo
 const MENU_HANDLE = 'main-menu'
@@ -99,6 +100,7 @@ export default function Header() {
   const [navLinks, setNavLinks] = useState(DEFAULT_LINKS)
   const [openMobileSub, setOpenMobileSub] = useState(null)
   const [now, setNow] = useState(() => Date.now())
+  const [searchOpen, setSearchOpen] = useState(false)
 
   // Countdown tick — har second update
   useEffect(() => {
@@ -197,7 +199,11 @@ export default function Header() {
 
             {/* Icons */}
             <div className={`flex items-center gap-5 ${textColor}`}>
-              <button className={`${hoverColor} transition-colors hidden sm:block`} aria-label="Search">
+              <button
+                onClick={() => setSearchOpen(true)}
+                className={`${hoverColor} transition-colors`}
+                aria-label="Search"
+              >
                 <SearchIcon />
               </button>
               <button className={`${hoverColor} transition-colors hidden sm:block`} aria-label="Wishlist">
@@ -285,7 +291,7 @@ export default function Header() {
                             key={sub.id}
                             to={sub.url}
                             onClick={() => setMenuOpen(false)}
-                            className="block py-2.5 text-xs tracking-wider uppercase text-charcoal/70 hover:text-burgundy transition-colors"
+                            className="block py-2.5 text-xs tracking-wider uppercase text-charcoal hover:text-burgundy transition-colors"
                           >
                             {sub.title}
                           </Link>
@@ -309,6 +315,9 @@ export default function Header() {
             </div>
           </div>
         </div>
+
+        {/* Smart search drawer */}
+        <SearchDrawer open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   )
 }

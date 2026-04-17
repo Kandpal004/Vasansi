@@ -17,6 +17,11 @@
     -moz-osx-font-smoothing: grayscale;
     color: #AC7783;
   }
+
+  /* Force brand rose on all headings and prices by default */
+  h1, h2, h3, h4, h5, h6 {
+    color: #AC7783;
+  }
 }
 
 @layer utilities {

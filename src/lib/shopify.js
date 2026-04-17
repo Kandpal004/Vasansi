@@ -331,6 +331,46 @@ export const COLLECTION_FACETS_QUERY = `
   }
 `
 
+// ── Predictive Search — Algolia-style autocomplete ──
+// Shopify ka built-in smart search (typo tolerant, fuzzy match)
+// Types me products, collections, queries aati hain
+export const PREDICTIVE_SEARCH_QUERY = `
+  query PredictiveSearch($query: String!, $limit: Int!) {
+    predictiveSearch(
+      query: $query,
+      limit: $limit,
+      limitScope: EACH,
+      types: [PRODUCT, COLLECTION, QUERY]
+    ) {
+      products {
+        id
+        title
+        handle
+        productType
+        vendor
+        featuredImage {
+          url(transform: { maxWidth: 120, maxHeight: 160, crop: CENTER })
+          altText
+        }
+        priceRange {
+          minVariantPrice { amount currencyCode }
+        }
+      }
+      collections {
+        id
+        title
+        handle
+        image {
+          url(transform: { maxWidth: 120, maxHeight: 120, crop: CENTER })
+        }
+      }
+      queries {
+        text
+      }
+    }
+  }
+`
+
 // ── Main Navigation Menu ──────────────────────────────────────
 // Shopify Admin → Online Store → Navigation mein Menu banta hai
 // "main-menu" default handle hai — agar tumne naam change kiya to yahan update karna

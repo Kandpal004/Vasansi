@@ -51,7 +51,7 @@ function FilterPanel({ filters, activeFilters, onToggle, onClearAll, filterOpen,
             Filters
             {activeCount > 0 && <span className="text-gold text-sm ml-2">({activeCount})</span>}
           </h3>
-          <button onClick={() => setFilterOpen(false)} className="text-charcoal/40 hover:text-charcoal transition-colors">
+          <button onClick={() => setFilterOpen(false)} className="text-charcoal hover:text-charcoal transition-colors">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
             </svg>
@@ -114,7 +114,7 @@ function FilterSections({ filters, activeFilters, onToggle }) {
                 {filter.label}
               </span>
               <svg
-                className={`w-4 h-4 text-charcoal/60 transition-transform duration-200 flex-shrink-0 ${isOpen ? '' : '-rotate-90'}`}
+                className={`w-4 h-4 text-charcoal transition-transform duration-200 flex-shrink-0 ${isOpen ? '' : '-rotate-90'}`}
                 fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -150,11 +150,11 @@ function FilterSections({ filters, activeFilters, onToggle }) {
                           )}
                         </span>
                         <span className={`text-[12px] tracking-[0.08em] uppercase flex-1 transition-colors ${
-                          isActive ? 'text-charcoal font-medium' : 'text-charcoal/75 font-light group-hover/item:text-charcoal'
+                          isActive ? 'text-charcoal font-medium' : 'text-charcoal font-light group-hover/item:text-charcoal'
                         }`}>
                           {val.label}
                         </span>
-                        <span className="text-[12px] text-charcoal/50 font-light tabular-nums">
+                        <span className="text-[12px] text-charcoal font-light tabular-nums">
                           ({val.count})
                         </span>
                       </label>
@@ -207,7 +207,7 @@ function PriceSliderFilter({ filter, activeFilters, onToggle }) {
       {/* Price display */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-1">
-          <span className="text-[11px] text-charcoal/40 font-light">₹</span>
+          <span className="text-[11px] text-charcoal font-light">₹</span>
           <input
             type="number"
             value={min}
@@ -216,9 +216,9 @@ function PriceSliderFilter({ filter, activeFilters, onToggle }) {
             className="w-16 text-xs text-charcoal font-medium border-b border-charcoal/15 pb-1 focus:outline-none focus:border-gold text-center bg-transparent"
           />
         </div>
-        <span className="text-charcoal/20 text-xs mx-2">—</span>
+        <span className="text-charcoal text-xs mx-2">—</span>
         <div className="flex items-center gap-1">
-          <span className="text-[11px] text-charcoal/40 font-light">₹</span>
+          <span className="text-[11px] text-charcoal font-light">₹</span>
           <input
             type="number"
             value={max}
@@ -324,7 +324,7 @@ function ProductCard({ product }) {
         <h3 className="text-charcoal text-xs lg:text-sm font-light leading-snug mb-1 line-clamp-2 group-hover:text-gold transition-colors">{product.title}</h3>
         <div className="flex items-center gap-2 justify-center">
           {price && <span className="text-charcoal font-medium text-xs lg:text-sm">{formatPrice(price.amount)}</span>}
-          {hasDiscount && <span className="text-charcoal/40 text-xs line-through">{formatPrice(compareAt.amount)}</span>}
+          {hasDiscount && <span className="text-charcoal text-xs line-through">{formatPrice(compareAt.amount)}</span>}
         </div>
       </div>
     </Link>
@@ -365,7 +365,7 @@ function ItemTypeTabs({ filter, activeFilters, setActiveFilters }) {
                   : 'bg-white text-charcoal border-charcoal hover:bg-charcoal/5'
               }`}
             >
-              {val.label} <span className={isActive ? 'text-white/70' : 'text-charcoal/40'}>({val.count})</span>
+              {val.label} <span className={isActive ? 'text-white/70' : 'text-charcoal'}>({val.count})</span>
             </button>
           )
         })}
@@ -579,7 +579,7 @@ export default function CollectionPage() {
           </>
         )}
         <div className="relative max-w-4xl mx-auto text-center">
-          <p className={`text-[10px] tracking-[0.3em] uppercase font-light mb-2 ${collection?.image ? 'text-white/80' : 'text-charcoal/40'}`}>Collection</p>
+          <p className={`text-[10px] tracking-[0.3em] uppercase font-light mb-2 ${collection?.image ? 'text-white/80' : 'text-charcoal'}`}>Collection</p>
           <h1 className={`font-serif text-xl lg:text-4xl font-light uppercase tracking-wide ${collection?.image ? 'text-white' : 'text-charcoal'}`}>
             {loading ? 'Loading...' : collection?.title || 'Collection'}
           </h1>
@@ -599,12 +599,12 @@ export default function CollectionPage() {
           Filter {activeFilters.length > 0 && `(${activeFilters.length})`}
         </button>
 
-        <p className="text-[10px] lg:text-xs tracking-wider text-charcoal/50 font-light">
+        <p className="text-[10px] lg:text-xs tracking-wider text-charcoal font-light">
           {loading ? '...' : `${products.length} Products`}
         </p>
 
         <div className="flex items-center gap-2">
-          <label className="text-xs tracking-wider text-charcoal/50 font-light hidden sm:block">Sort:</label>
+          <label className="text-xs tracking-wider text-charcoal font-light hidden sm:block">Sort:</label>
           <select
             value={sortIndex}
             onChange={e => setSortIndex(Number(e.target.value))}
@@ -649,8 +649,8 @@ export default function CollectionPage() {
 
           {!loading && products.length === 0 && (
             <div className="text-center py-16">
-              <p className="font-serif text-xl text-charcoal/50 mb-2">No products found</p>
-              <p className="text-charcoal/40 text-xs mb-6">Try changing or clearing the filters</p>
+              <p className="font-serif text-xl text-charcoal mb-2">No products found</p>
+              <p className="text-charcoal text-xs mb-6">Try changing or clearing the filters</p>
               {activeFilters.length > 0 && (
                 <button onClick={clearAllFilters} className="bg-gold text-white text-xs tracking-[0.2em] uppercase px-8 py-3">
                   Clear All Filters
@@ -662,7 +662,7 @@ export default function CollectionPage() {
           {!loading && hasMore && <div ref={sentinelRef} className="h-1" aria-hidden="true" />}
 
           {loadingMore && (
-            <div className="flex justify-center items-center gap-2 py-8 text-charcoal/50">
+            <div className="flex justify-center items-center gap-2 py-8 text-charcoal">
               <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
@@ -672,7 +672,7 @@ export default function CollectionPage() {
           )}
 
           {!loading && !hasMore && products.length > 0 && (
-            <p className="text-center text-[10px] tracking-widest uppercase text-charcoal/30 font-light py-8">— End of collection —</p>
+            <p className="text-center text-[10px] tracking-widest uppercase text-charcoal font-light py-8">— End of collection —</p>
           )}
         </div>
       </div>

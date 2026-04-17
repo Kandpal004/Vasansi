@@ -47,7 +47,7 @@ function CartLineItem({ line }) {
         </Link>
 
         {options && (
-          <p className="text-[10px] text-charcoal/50 tracking-wider mt-1 uppercase">{options}</p>
+          <p className="text-[10px] text-charcoal tracking-wider mt-1 uppercase">{options}</p>
         )}
 
         <p className="text-sm font-medium text-charcoal mt-2">
@@ -73,7 +73,7 @@ function CartLineItem({ line }) {
           <button
             onClick={() => removeLine(line.id)}
             disabled={loading}
-            className="text-charcoal/40 hover:text-red-500 transition-colors disabled:opacity-40"
+            className="text-charcoal hover:text-red-500 transition-colors disabled:opacity-40"
             aria-label="Remove"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -122,7 +122,7 @@ export default function CartDrawer() {
           </div>
           <button
             onClick={() => setDrawerOpen(false)}
-            className="text-charcoal/60 hover:text-charcoal transition-colors"
+            className="text-charcoal hover:text-charcoal transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -149,7 +149,7 @@ export default function CartDrawer() {
                     <span>You've unlocked <strong className="font-medium">free shipping!</strong></span>
                   </div>
                 ) : (
-                  <div className="text-xs text-charcoal/60 font-light">
+                  <div className="text-xs text-charcoal font-light">
                     Add <span className="font-medium text-charcoal">
                       {formatPrice(999 - Number(total?.amount || 0))}
                     </span> more for free shipping
@@ -159,13 +159,13 @@ export default function CartDrawer() {
 
               {/* Subtotal */}
               <div className="flex justify-between items-center mb-4">
-                <span className="text-xs tracking-[0.2em] uppercase text-charcoal/60 font-light">Subtotal</span>
+                <span className="text-xs tracking-[0.2em] uppercase text-charcoal font-light">Subtotal</span>
                 <span className="text-lg font-medium text-charcoal">
                   {subtotal && formatPrice(subtotal.amount, subtotal.currencyCode)}
                 </span>
               </div>
 
-              <p className="text-[10px] text-charcoal/40 mb-4 font-light">
+              <p className="text-[10px] text-charcoal mb-4 font-light">
                 Shipping & taxes calculated at checkout
               </p>
 
@@ -190,11 +190,11 @@ export default function CartDrawer() {
         ) : (
           /* Empty cart */
           <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
-            <svg className="w-16 h-16 text-charcoal/15 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={0.8}>
+            <svg className="w-16 h-16 text-charcoal mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={0.8}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
             </svg>
-            <p className="font-serif text-xl text-charcoal/50 mb-2">Your cart is empty</p>
-            <p className="text-xs text-charcoal/40 font-light mb-8">Looks like you haven't added anything yet</p>
+            <p className="font-serif text-xl text-charcoal mb-2">Your cart is empty</p>
+            <p className="text-xs text-charcoal font-light mb-8">Looks like you haven't added anything yet</p>
             <button
               onClick={() => setDrawerOpen(false)}
               className="bg-gold text-white text-xs tracking-[0.25em] uppercase font-medium px-10 py-3 hover:brightness-90 transition-all"

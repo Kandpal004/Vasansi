@@ -10,11 +10,11 @@ export default function ConsultantBanner() {
           Talk to Vasansi's Fashion Consultants
         </h3>
 
-        <div className="text-charcoal/80 text-[10px] lg:text-sm font-light text-center flex flex-col sm:flex-row items-center gap-1 sm:gap-4">
+        <div className="text-charcoal text-[10px] lg:text-sm font-light text-center flex flex-col sm:flex-row items-center gap-1 sm:gap-4">
           <a href="tel:+919116699595" className="hover:text-charcoal transition-colors">
             Call & WhatsApp at <span className="font-medium">+91-9116699595</span>
           </a>
-          <span className="hidden sm:inline text-charcoal/40">or</span>
+          <span className="hidden sm:inline text-charcoal">or</span>
           <a href="mailto:reachus@vasansi.co.in" className="hover:text-charcoal transition-colors">
             Email at <span className="font-medium">reachus@vasansi.co.in</span>
           </a>

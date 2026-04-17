@@ -16,13 +16,13 @@ function DetailSection({ title, children, defaultOpen = false }) {
   return (
     <div className="border-b border-charcoal/8">
       <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between py-4 lg:py-5 text-left group">
-        <span className="text-[12px] lg:text-[13px] tracking-[0.15em] uppercase text-charcoal/80 font-medium group-hover:text-gold transition-colors">{title}</span>
-        <svg className={`w-4 h-4 text-charcoal/30 transition-transform duration-300 ${open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+        <span className="text-[12px] lg:text-[13px] tracking-[0.15em] uppercase text-charcoal font-medium group-hover:text-gold transition-colors">{title}</span>
+        <svg className={`w-4 h-4 text-charcoal transition-transform duration-300 ${open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
         </svg>
       </button>
       <div className={`overflow-hidden transition-all duration-300 ease-out ${open ? 'max-h-[2000px] pb-5' : 'max-h-0'}`}>
-        <div className="text-[13px] text-charcoal/55 font-light leading-relaxed">{children}</div>
+        <div className="text-[13px] text-charcoal font-light leading-relaxed">{children}</div>
       </div>
     </div>
   )
@@ -71,7 +71,7 @@ function RelatedCard({ product }) {
         <h3 className="text-charcoal text-xs lg:text-sm font-light line-clamp-1 group-hover:text-gold transition-colors mb-1">{product.title}</h3>
         <div className="flex items-center gap-2 justify-center">
           {price && <span className="text-charcoal font-medium text-xs lg:text-sm">{formatPrice(price.amount)}</span>}
-          {hasDiscount && <span className="text-charcoal/35 text-xs line-through">{formatPrice(compareAt.amount)}</span>}
+          {hasDiscount && <span className="text-charcoal text-xs line-through">{formatPrice(compareAt.amount)}</span>}
         </div>
       </div>
     </Link>
@@ -151,13 +151,13 @@ function ImageGallery({ images, activeImg, setActiveImg, hasDiscount, discount, 
           <>
             <button
               onClick={() => goTo(activeImg - 1)}
-              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 lg:w-10 lg:h-10 bg-white/80 hover:bg-white flex items-center justify-center text-charcoal/60 hover:text-charcoal transition-all shadow-sm"
+              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 lg:w-10 lg:h-10 bg-white/80 hover:bg-white flex items-center justify-center text-charcoal hover:text-charcoal transition-all shadow-sm"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>
             </button>
             <button
               onClick={() => goTo(activeImg + 1)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 lg:w-10 lg:h-10 bg-white/80 hover:bg-white flex items-center justify-center text-charcoal/60 hover:text-charcoal transition-all shadow-sm"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 lg:w-10 lg:h-10 bg-white/80 hover:bg-white flex items-center justify-center text-charcoal hover:text-charcoal transition-all shadow-sm"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
             </button>
@@ -314,7 +314,7 @@ export default function ProductPage() {
   if (!product) {
     return (
       <div className="pt-24 min-h-[60vh] flex flex-col items-center justify-center px-4">
-        <p className="font-serif text-2xl text-charcoal/50 mb-3">Product not found</p>
+        <p className="font-serif text-2xl text-charcoal mb-3">Product not found</p>
         <Link to="/" className="bg-gold text-white text-xs tracking-[0.2em] uppercase px-8 py-3 mt-4">Back to Home</Link>
       </div>
     )
@@ -331,12 +331,12 @@ export default function ProductPage() {
 
       {/* ── Breadcrumb ── */}
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 lg:py-4">
-        <nav className="flex items-center text-[10px] lg:text-xs tracking-wider text-charcoal/35 font-light">
+        <nav className="flex items-center text-[10px] lg:text-xs tracking-wider text-charcoal font-light">
           <Link to="/" className="hover:text-gold transition-colors">Home</Link>
           <span className="mx-2">/</span>
           <Link to="/collections/shop-all" className="hover:text-gold transition-colors">Shop</Link>
           <span className="mx-2">/</span>
-          <span className="text-charcoal/60 truncate max-w-[150px] lg:max-w-none">{product.title}</span>
+          <span className="text-charcoal truncate max-w-[150px] lg:max-w-none">{product.title}</span>
         </nav>
       </div>
 
@@ -363,8 +363,8 @@ export default function ProductPage() {
               )}
               {product.productType && (
                 <>
-                  <span className="text-charcoal/15">|</span>
-                  <span className="text-[10px] lg:text-[11px] tracking-wider uppercase text-charcoal/40 font-light">{product.productType}</span>
+                  <span className="text-charcoal">|</span>
+                  <span className="text-[10px] lg:text-[11px] tracking-wider uppercase text-charcoal font-light">{product.productType}</span>
                 </>
               )}
             </div>
@@ -377,12 +377,12 @@ export default function ProductPage() {
               <span className="text-xl lg:text-2xl font-medium text-charcoal">{price && formatPrice(price.amount, price.currencyCode)}</span>
               {hasDiscount && (
                 <>
-                  <span className="text-sm lg:text-base text-charcoal/30 line-through font-light">{formatPrice(compareAt.amount)}</span>
+                  <span className="text-sm lg:text-base text-charcoal line-through font-light">{formatPrice(compareAt.amount)}</span>
                   <span className="text-[10px] bg-gold/10 text-gold px-2 py-0.5 rounded-sm font-medium tracking-wider uppercase">Save {discount}%</span>
                 </>
               )}
             </div>
-            <p className="text-[10px] text-charcoal/35 tracking-wider mb-5 font-light">MRP incl. of all taxes</p>
+            <p className="text-[10px] text-charcoal tracking-wider mb-5 font-light">MRP incl. of all taxes</p>
 
             {/* Divider */}
             <div className="h-px bg-charcoal/6 mb-5" />
@@ -390,7 +390,7 @@ export default function ProductPage() {
             {/* Availability */}
             <div className="flex items-center gap-2 mb-5">
               <span className={`w-1.5 h-1.5 rounded-full ${inStock ? 'bg-emerald-500' : 'bg-red-400'}`} />
-              <span className="text-[11px] tracking-wider uppercase text-charcoal/50 font-light">
+              <span className="text-[11px] tracking-wider uppercase text-charcoal font-light">
                 {inStock ? 'In Stock — Ready to Ship' : 'Currently Unavailable'}
               </span>
             </div>
@@ -402,7 +402,7 @@ export default function ProductPage() {
 
               return (
                 <div key={option.id} className="mb-5">
-                  <p className="text-[11px] tracking-[0.15em] uppercase text-charcoal/70 font-medium mb-2.5">
+                  <p className="text-[11px] tracking-[0.15em] uppercase text-charcoal font-medium mb-2.5">
                     {option.name}: <span className="text-gold font-light normal-case tracking-normal ml-1">{selected}</span>
                   </p>
                   <div className="flex flex-wrap gap-1.5 lg:gap-2">
@@ -415,7 +415,7 @@ export default function ProductPage() {
                           className={`min-w-[40px] px-3 lg:px-4 py-2 lg:py-2.5 text-[11px] tracking-wider uppercase font-light border transition-all duration-200 ${
                             isActive
                               ? 'bg-gold text-white border-gold shadow-sm'
-                              : 'bg-white text-charcoal/70 border-charcoal/12 hover:border-gold hover:text-gold'
+                              : 'bg-white text-charcoal border-charcoal/12 hover:border-gold hover:text-gold'
                           }`}
                         >
                           {value}
@@ -429,11 +429,11 @@ export default function ProductPage() {
 
             {/* Quantity */}
             <div className="mb-6">
-              <p className="text-[11px] tracking-[0.15em] uppercase text-charcoal/70 font-medium mb-2.5">Quantity</p>
+              <p className="text-[11px] tracking-[0.15em] uppercase text-charcoal font-medium mb-2.5">Quantity</p>
               <div className="inline-flex items-center border border-charcoal/12">
-                <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="w-10 h-10 text-charcoal/60 text-base hover:bg-cream transition-colors">−</button>
+                <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="w-10 h-10 text-charcoal text-base hover:bg-cream transition-colors">−</button>
                 <span className="w-10 text-center text-sm font-medium text-charcoal border-x border-charcoal/12">{quantity}</span>
-                <button onClick={() => setQuantity(q => q + 1)} className="w-10 h-10 text-charcoal/60 text-base hover:bg-cream transition-colors">+</button>
+                <button onClick={() => setQuantity(q => q + 1)} className="w-10 h-10 text-charcoal text-base hover:bg-cream transition-colors">+</button>
               </div>
             </div>
 
@@ -466,7 +466,7 @@ export default function ProductPage() {
               </div>
 
               {/* Wishlist */}
-              <button className="w-full flex items-center justify-center gap-2 text-[11px] tracking-wider uppercase text-charcoal/50 py-3 mt-2.5 hover:text-gold transition-colors font-light">
+              <button className="w-full flex items-center justify-center gap-2 text-[11px] tracking-wider uppercase text-charcoal py-3 mt-2.5 hover:text-gold transition-colors font-light">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                 </svg>
@@ -478,15 +478,15 @@ export default function ProductPage() {
             <div className="grid grid-cols-3 gap-3 py-5 mb-4 border-y border-charcoal/6">
               <div className="flex flex-col items-center text-center gap-1.5">
                 <span className="text-gold"><TruckIcon /></span>
-                <span className="text-[9px] lg:text-[10px] tracking-wider text-charcoal/45 font-light leading-tight">Free Shipping<br />Above ₹999</span>
+                <span className="text-[9px] lg:text-[10px] tracking-wider text-charcoal font-light leading-tight">Free Shipping<br />Above ₹999</span>
               </div>
               <div className="flex flex-col items-center text-center gap-1.5">
                 <span className="text-gold"><ShieldIcon /></span>
-                <span className="text-[9px] lg:text-[10px] tracking-wider text-charcoal/45 font-light leading-tight">100% Authentic<br />Handcrafted</span>
+                <span className="text-[9px] lg:text-[10px] tracking-wider text-charcoal font-light leading-tight">100% Authentic<br />Handcrafted</span>
               </div>
               <div className="flex flex-col items-center text-center gap-1.5">
                 <span className="text-gold"><ReturnIcon /></span>
-                <span className="text-[9px] lg:text-[10px] tracking-wider text-charcoal/45 font-light leading-tight">15-Day Easy<br />Returns</span>
+                <span className="text-[9px] lg:text-[10px] tracking-wider text-charcoal font-light leading-tight">15-Day Easy<br />Returns</span>
               </div>
             </div>
 
@@ -533,7 +533,7 @@ export default function ProductPage() {
         <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-12 lg:mt-20">
           <div className="h-px bg-charcoal/6 mb-10 lg:mb-14" />
           <div className="text-center mb-6 lg:mb-10">
-            <p className="text-[10px] tracking-[0.3em] uppercase text-charcoal/35 font-light mb-2">You May Also Like</p>
+            <p className="text-[10px] tracking-[0.3em] uppercase text-charcoal font-light mb-2">You May Also Like</p>
             <h2 className="font-serif text-xl lg:text-2xl font-light text-charcoal uppercase tracking-wide">Complete Your Look</h2>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-6">
