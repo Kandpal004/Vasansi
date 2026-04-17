@@ -359,7 +359,7 @@ function ItemTypeTabs({ filter, activeFilters, setActiveFilters }) {
             <button
               key={val.id}
               onClick={() => handleClick(val)}
-              className={`text-[10px] lg:text-xs tracking-[0.2em] uppercase px-4 lg:px-6 py-2 lg:py-2.5 border transition-all font-light ${
+              className={`text-[10px] lg:text-xs tracking-[0.2em] uppercase px-4 lg:px-6 py-2 lg:py-2.5 border-2 border-solid transition-all font-medium ${
                 isActive
                   ? 'bg-charcoal text-white border-charcoal'
                   : 'bg-white text-charcoal border-charcoal hover:bg-charcoal/5'

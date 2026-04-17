@@ -534,7 +534,7 @@ export default function ProductPage() {
           <div className="h-px bg-charcoal/6 mb-10 lg:mb-14" />
           <div className="text-center mb-6 lg:mb-10">
             <p className="text-[10px] tracking-[0.3em] uppercase text-charcoal/35 font-light mb-2">You May Also Like</p>
-            <h2 className="font-serif text-xl lg:text-2xl font-light text-charcoal">Complete Your Look</h2>
+            <h2 className="font-serif text-xl lg:text-2xl font-light text-charcoal uppercase tracking-wide">Complete Your Look</h2>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-6">
             {related.map(p => <RelatedCard key={p.id} product={p} />)}
