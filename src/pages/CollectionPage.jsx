@@ -111,10 +111,12 @@ function FilterSections({ filters, activeFilters, onToggle }) {
   const [openSections, setOpenSections] = useState({})
   const toggle = (id) => setOpenSections(prev => ({ ...prev, [id]: !prev[id] }))
 
-  const ALLOWED = ['price', 'size', 'product type', 'item type']
-  const visibleFilters = filters.filter(f =>
-    ALLOWED.some(a => f.label.toLowerCase().includes(a))
-  )
+  // Shopify jo bhi filters return kare sab dikhao — availability/in-stock ko skip kar do
+  const SKIP = ['availability', 'in stock', 'vendor']
+  const visibleFilters = filters.filter(f => {
+    const l = f.label.toLowerCase()
+    return !SKIP.some(s => l.includes(s))
+  })
 
   return (
     <div>
