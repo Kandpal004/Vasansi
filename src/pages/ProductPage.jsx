@@ -258,20 +258,32 @@ export default function ProductPage() {
     }
   }
 
-  // Sticky mobile CTA — jaise hi inline CTA viewport ke top se upar chali jaye
+  // Sticky mobile CTA — inline CTA ke near/out-of-view hone pe show karo
   useEffect(() => {
+    let rafId = null
     const check = () => {
       if (!ctaRef.current) return
       const rect = ctaRef.current.getBoundingClientRect()
-      // inline CTA ka bottom viewport se upar gaya = sticky dikhao
-      setShowStickyCTA(rect.bottom < 0)
+      // inline CTA ka top viewport ke upar chadh gaya = sticky dikhao
+      setShowStickyCTA(rect.top < 20)
     }
-    window.addEventListener('scroll', check, { passive: true })
-    window.addEventListener('resize', check)
+    const onScroll = () => {
+      if (rafId) return
+      rafId = requestAnimationFrame(() => {
+        check()
+        rafId = null
+      })
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    // Initial + product load ke baad re-check
     check()
+    const t = setTimeout(check, 200)
     return () => {
-      window.removeEventListener('scroll', check)
-      window.removeEventListener('resize', check)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      clearTimeout(t)
+      if (rafId) cancelAnimationFrame(rafId)
     }
   }, [product])
 
@@ -532,7 +544,7 @@ export default function ProductPage() {
 
       {/* ── Mobile Sticky CTA — bottom fixed jab inline CTA scroll out ── */}
       <div
-        className={`lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-charcoal/10 shadow-[0_-4px_12px_rgba(0,0,0,0.06)] px-3 py-2.5 transition-transform duration-300 ${
+        className={`lg:hidden fixed bottom-0 left-0 right-0 z-[60] bg-white border-t border-charcoal/10 shadow-[0_-4px_12px_rgba(0,0,0,0.08)] px-3 py-2.5 transition-transform duration-300 ${
           showStickyCTA ? 'translate-y-0' : 'translate-y-full'
         }`}
       >

@@ -539,7 +539,7 @@ export default function CollectionPage() {
         <div className="flex-1 min-w-0">
           <ActiveFilterChips activeFilters={activeFilters} onRemove={removeFilter} onClearAll={clearAllFilters} />
 
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-5">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-5">
             {loading
               ? [...Array(PAGE_SIZE)].map((_, i) => <SkeletonCard key={i} />)
               : products.map(p => <ProductCard key={p.id} product={p} />)
