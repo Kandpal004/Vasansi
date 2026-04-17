@@ -211,6 +211,8 @@ export default function ProductPage() {
   const [quantity, setQuantity]     = useState(1)
   const [related, setRelated]       = useState([])
   const [addedToCart, setAddedToCart] = useState(false)
+  const [showStickyCTA, setShowStickyCTA] = useState(false)
+  const ctaRef = useRef(null)
 
   useEffect(() => {
     setLoading(true)
@@ -255,6 +257,17 @@ export default function ProductPage() {
       setTimeout(() => setAddedToCart(false), 2000)
     }
   }
+
+  // Sticky mobile CTA — jab inline CTA scroll se out of view ho
+  useEffect(() => {
+    if (!ctaRef.current) return
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowStickyCTA(!entry.isIntersecting),
+      { threshold: 0, rootMargin: '0px 0px -40px 0px' }
+    )
+    observer.observe(ctaRef.current)
+    return () => observer.disconnect()
+  }, [product])
 
   // ── Loading skeleton ──
   if (loading) {
@@ -407,33 +420,35 @@ export default function ProductPage() {
             </div>
 
             {/* ── CTA Buttons ── */}
-            <div className="space-y-2.5 mb-6">
-              {/* Add to Cart */}
-              <button
-                disabled={!inStock || !variant || cartLoading}
-                onClick={handleAddToCart}
-                className={`w-full text-[11px] tracking-[0.25em] uppercase font-medium py-4 transition-all duration-300 flex items-center justify-center gap-2 ${
-                  addedToCart
-                    ? 'bg-emerald-600 text-white'
-                    : 'bg-gold text-white hover:brightness-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed'
-                }`}
-              >
-                {addedToCart ? (
-                  <><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> Added to Cart</>
-                ) : cartLoading ? 'Adding...' : inStock ? 'Add to Cart' : 'Sold Out'}
-              </button>
+            <div className="mb-6">
+              <div ref={ctaRef} className="grid grid-cols-2 gap-2.5">
+                {/* Add to Cart */}
+                <button
+                  disabled={!inStock || !variant || cartLoading}
+                  onClick={handleAddToCart}
+                  className={`w-full text-[11px] tracking-[0.25em] uppercase font-medium py-4 transition-all duration-300 flex items-center justify-center gap-2 ${
+                    addedToCart
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-gold text-white hover:brightness-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed'
+                  }`}
+                >
+                  {addedToCart ? (
+                    <><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg> Added</>
+                  ) : cartLoading ? 'Adding...' : inStock ? 'Add to Cart' : 'Sold Out'}
+                </button>
 
-              {/* Buy Now */}
-              <button
-                disabled={!inStock || !variant || cartLoading}
-                onClick={() => variant && buyNow(variant.id, quantity)}
-                className="w-full border-[1.5px] border-charcoal text-charcoal text-[11px] tracking-[0.25em] uppercase font-medium py-4 hover:bg-charcoal hover:text-white transition-all duration-300 disabled:border-gray-200 disabled:text-gray-300 disabled:cursor-not-allowed"
-              >
-                Buy Now
-              </button>
+                {/* Buy Now */}
+                <button
+                  disabled={!inStock || !variant || cartLoading}
+                  onClick={() => variant && buyNow(variant.id, quantity)}
+                  className="w-full border-[1.5px] border-charcoal text-charcoal text-[11px] tracking-[0.25em] uppercase font-medium py-4 hover:bg-charcoal hover:text-white transition-all duration-300 disabled:border-gray-200 disabled:text-gray-300 disabled:cursor-not-allowed"
+                >
+                  Buy Now
+                </button>
+              </div>
 
               {/* Wishlist */}
-              <button className="w-full flex items-center justify-center gap-2 text-[11px] tracking-wider uppercase text-charcoal/50 py-3 hover:text-gold transition-colors font-light">
+              <button className="w-full flex items-center justify-center gap-2 text-[11px] tracking-wider uppercase text-charcoal/50 py-3 mt-2.5 hover:text-gold transition-colors font-light">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                 </svg>
@@ -508,6 +523,34 @@ export default function ProductPage() {
           </div>
         </section>
       )}
+
+      {/* ── Mobile Sticky CTA — bottom fixed jab inline CTA scroll out ── */}
+      <div
+        className={`lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-charcoal/10 shadow-[0_-4px_12px_rgba(0,0,0,0.06)] px-3 py-2.5 transition-transform duration-300 ${
+          showStickyCTA ? 'translate-y-0' : 'translate-y-full'
+        }`}
+      >
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            disabled={!inStock || !variant || cartLoading}
+            onClick={handleAddToCart}
+            className={`w-full text-[11px] tracking-[0.2em] uppercase font-medium py-3 transition-all duration-300 flex items-center justify-center gap-1.5 ${
+              addedToCart
+                ? 'bg-emerald-600 text-white'
+                : 'bg-gold text-white disabled:bg-gray-200 disabled:text-gray-400'
+            }`}
+          >
+            {addedToCart ? 'Added' : cartLoading ? 'Adding...' : inStock ? 'Add to Cart' : 'Sold Out'}
+          </button>
+          <button
+            disabled={!inStock || !variant || cartLoading}
+            onClick={() => variant && buyNow(variant.id, quantity)}
+            className="w-full border-[1.5px] border-charcoal text-charcoal text-[11px] tracking-[0.2em] uppercase font-medium py-3 disabled:border-gray-200 disabled:text-gray-300"
+          >
+            Buy Now
+          </button>
+        </div>
+      </div>
     </div>
   )
 }

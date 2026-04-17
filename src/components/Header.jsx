@@ -154,7 +154,7 @@ export default function Header() {
         </div>
 
         {/* Marquee — scroll pe hide */}
-        <div className="animate-marquee py-1.5">
+        <div className="animate-marquee py-1.5 bg-black/30">
           {announcements.map((text, i) => (
             <span key={i} className="inline-flex items-center whitespace-nowrap">
               <span className="text-white text-xs tracking-widest uppercase font-light mx-6">{text}</span>
