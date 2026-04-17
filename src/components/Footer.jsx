@@ -1,30 +1,30 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 const footerLinks = {
   shop: [
-    { name: 'New Arrivals', href: '#' },
-    { name: 'Sarees', href: '#' },
-    { name: 'Anarkalis', href: '#' },
-    { name: 'Lehengas', href: '#' },
-    { name: 'Fusion Wear', href: '#' },
-    { name: 'Unstitched Sets', href: '#' },
-    { name: 'Sale', href: '#' },
+    { name: 'New Arrivals',    to: '/collections/new-arrivals' },
+    { name: 'Sarees',          to: '/collections/designer-and-party-wear-sarees' },
+    { name: 'Anarkalis',       to: '/collections/gowns-and-anarkali-dresses' },
+    { name: 'Lehengas',        to: '/collections/lehengas' },
+    { name: 'Fusion Wear',     to: '/collections/fusion-wear' },
+    { name: 'Shop All',        to: '/collections/shop-all' },
   ],
   help: [
-    { name: 'Contact Us', href: '#' },
-    { name: 'Size Guide', href: '#' },
-    { name: 'Shipping Policy', href: '#' },
-    { name: 'Return & Refund', href: '#' },
-    { name: 'Track Your Order', href: '#' },
-    { name: 'FAQs', href: '#' },
+    { name: 'Contact Us',       to: '/contact' },
+    { name: 'Size Guide',       to: '/size-guide' },
+    { name: 'Shipping Policy',  to: '/policies/shipping-policy' },
+    { name: 'Return & Refund',  to: '/policies/refund-policy' },
+    { name: 'Track Your Order', to: '/track-order' },
+    { name: 'FAQs',             to: '/faqs' },
   ],
   company: [
-    { name: 'About Vasansi', href: '#' },
-    { name: 'Our Story', href: '#' },
-    { name: 'Artisan Stories', href: '#' },
-    { name: 'Blog', href: '#' },
-    { name: 'Privacy Policy', href: '#' },
-    { name: 'Terms of Service', href: '#' },
+    { name: 'About Vasansi',    to: '/pages/about-us' },
+    { name: 'Our Story',        to: '/pages/our-story' },
+    { name: 'Artisan Stories',  to: '/pages/artisan-stories' },
+    { name: 'Blog',             to: '/pages/blog' },
+    { name: 'Privacy Policy',   to: '/policies/privacy-policy' },
+    { name: 'Terms of Service', to: '/policies/terms-of-service' },
   ],
 }
 
@@ -155,9 +155,9 @@ export default function Footer() {
             <ul className="space-y-3 pt-2 lg:pt-0">
               {footerLinks.shop.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-white/85 text-sm font-light hover:text-white transition-colors">
+                  <Link to={link.to} className="text-white/85 text-sm font-light hover:text-white transition-colors">
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -168,9 +168,9 @@ export default function Footer() {
             <ul className="space-y-3 pt-2 lg:pt-0">
               {footerLinks.help.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-white/85 text-sm font-light hover:text-white transition-colors">
+                  <Link to={link.to} className="text-white/85 text-sm font-light hover:text-white transition-colors">
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -198,9 +198,9 @@ export default function Footer() {
             <ul className="space-y-3">
               {footerLinks.company.slice(0, 4).map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-white/85 text-sm font-light hover:text-white transition-colors">
+                  <Link to={link.to} className="text-white/85 text-sm font-light hover:text-white transition-colors">
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

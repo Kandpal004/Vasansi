@@ -371,6 +371,34 @@ export const PREDICTIVE_SEARCH_QUERY = `
   }
 `
 
+// ── Shopify Page by Handle — About, Our Story, etc. ──
+export const PAGE_QUERY = `
+  query Page($handle: String!) {
+    page(handle: $handle) {
+      id
+      title
+      body
+      bodySummary
+      seo { title description }
+      createdAt
+      updatedAt
+    }
+  }
+`
+
+// ── Shopify Policies — Privacy, Shipping, Refund, Terms ──
+export const SHOP_POLICIES_QUERY = `
+  query ShopPolicies {
+    shop {
+      privacyPolicy { id title body handle }
+      shippingPolicy { id title body handle }
+      refundPolicy { id title body handle }
+      termsOfService { id title body handle }
+      subscriptionPolicy { id title body handle }
+    }
+  }
+`
+
 // ── Main Navigation Menu ──────────────────────────────────────
 // Shopify Admin → Online Store → Navigation mein Menu banta hai
 // "main-menu" default handle hai — agar tumne naam change kiya to yahan update karna

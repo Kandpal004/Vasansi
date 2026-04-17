@@ -86,3 +86,87 @@
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #810621; border-radius: 2px; }
+
+/* Prose styling for Shopify CMS HTML content */
+.prose-content h1,
+.prose-content h2,
+.prose-content h3,
+.prose-content h4 {
+  font-family: 'Proza Libre', Georgia, serif;
+  color: #AC7783;
+  font-weight: 300;
+  margin-top: 2em;
+  margin-bottom: 0.6em;
+  letter-spacing: 0.02em;
+}
+.prose-content h1 { font-size: 2rem; }
+.prose-content h2 { font-size: 1.6rem; }
+.prose-content h3 { font-size: 1.3rem; }
+.prose-content h4 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.15em; }
+
+.prose-content p {
+  margin-bottom: 1.2em;
+  line-height: 1.9;
+}
+
+.prose-content a {
+  color: #AC7783;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose-content a:hover { color: #8B5A66; }
+
+.prose-content strong { font-weight: 600; color: #AC7783; }
+
+.prose-content ul,
+.prose-content ol {
+  margin: 1em 0 1.5em 1.5em;
+  padding-left: 0.5em;
+}
+.prose-content ul { list-style: disc; }
+.prose-content ol { list-style: decimal; }
+.prose-content li {
+  margin-bottom: 0.5em;
+  padding-left: 0.3em;
+}
+
+.prose-content blockquote {
+  border-left: 2px solid #AC7783;
+  padding-left: 1.2em;
+  margin: 1.5em 0;
+  font-style: italic;
+  color: #8B5A66;
+}
+
+.prose-content img {
+  max-width: 100%;
+  height: auto;
+  margin: 1.5em 0;
+}
+
+.prose-content hr {
+  border: none;
+  border-top: 1px solid #AC7783;
+  margin: 2em auto;
+  width: 60%;
+}
+
+.prose-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+}
+.prose-content th,
+.prose-content td {
+  border: 1px solid #AC7783;
+  padding: 0.6em 0.8em;
+  text-align: left;
+}
+.prose-content th {
+  background: #AC7783;
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85em;
+  letter-spacing: 0.08em;
+}
