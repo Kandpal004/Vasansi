@@ -312,6 +312,25 @@ export const COLLECTION_PAGE_QUERY = `
   }
 `
 
+// ── Collection Facets — lightweight query to build our own filter UI ──
+// Shopify ke Search & Discovery app config pe depend nahi — hum khud productType
+// aur variant options (Size etc.) se unique values count kar leinge
+export const COLLECTION_FACETS_QUERY = `
+  query CollectionFacets($handle: String!) {
+    collection(handle: $handle) {
+      products(first: 250) {
+        nodes {
+          productType
+          options {
+            name
+            values
+          }
+        }
+      }
+    }
+  }
+`
+
 // ── Main Navigation Menu ──────────────────────────────────────
 // Shopify Admin → Online Store → Navigation mein Menu banta hai
 // "main-menu" default handle hai — agar tumne naam change kiya to yahan update karna

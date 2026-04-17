@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { shopifyFetch, COLLECTION_PAGE_QUERY } from '../lib/shopify'
+import { shopifyFetch, COLLECTION_PAGE_QUERY, COLLECTION_FACETS_QUERY } from '../lib/shopify'
 
 const PAGE_SIZE = 12
 
@@ -368,6 +368,7 @@ export default function CollectionPage() {
   const [collection, setCollection] = useState(null)
   const [products, setProducts]     = useState([])
   const [shopifyFilters, setShopifyFilters] = useState([])
+  const [syntheticFilters, setSyntheticFilters] = useState([])
   const [activeFilters, setActiveFilters]   = useState([])
   const [loading, setLoading]       = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
@@ -437,6 +438,73 @@ export default function CollectionPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [handle, sortIndex, activeFilters])
 
+  // Build synthetic filters (Product Type + Size) from collection products
+  useEffect(() => {
+    shopifyFetch(COLLECTION_FACETS_QUERY, { handle })
+      .then(data => {
+        const nodes = data?.collection?.products?.nodes || []
+        if (!nodes.length) { setSyntheticFilters([]); return }
+
+        // Product Type counts
+        const typeCounts = new Map()
+        // Variant option counts: { optionName → Map<value, count> }
+        const optionCounts = new Map()
+
+        for (const p of nodes) {
+          if (p.productType) {
+            typeCounts.set(p.productType, (typeCounts.get(p.productType) || 0) + 1)
+          }
+          for (const opt of (p.options || [])) {
+            if (!optionCounts.has(opt.name)) optionCounts.set(opt.name, new Map())
+            const vmap = optionCounts.get(opt.name)
+            for (const val of (opt.values || [])) {
+              vmap.set(val, (vmap.get(val) || 0) + 1)
+            }
+          }
+        }
+
+        const built = []
+
+        if (typeCounts.size) {
+          built.push({
+            id: 'facet-product-type',
+            label: 'Product Type',
+            type: 'LIST',
+            values: [...typeCounts.entries()]
+              .sort((a, b) => a[0].localeCompare(b[0]))
+              .map(([name, count]) => ({
+                id: `type-${name}`,
+                label: name,
+                count,
+                input: JSON.stringify({ productType: name }),
+              })),
+          })
+        }
+
+        // Size first, then other variant options
+        const optNames = [...optionCounts.keys()]
+        optNames.sort((a, b) => (a.toLowerCase() === 'size' ? -1 : b.toLowerCase() === 'size' ? 1 : 0))
+        for (const name of optNames) {
+          if (name.toLowerCase() === 'title') continue
+          const vmap = optionCounts.get(name)
+          built.push({
+            id: `facet-opt-${name}`,
+            label: name,
+            type: 'LIST',
+            values: [...vmap.entries()].map(([val, count]) => ({
+              id: `opt-${name}-${val}`,
+              label: val,
+              count,
+              input: JSON.stringify({ variantOption: { name, value: val } }),
+            })),
+          })
+        }
+
+        setSyntheticFilters(built)
+      })
+      .catch(() => setSyntheticFilters([]))
+  }, [handle])
+
   // Infinite scroll
   useEffect(() => {
     const sentinel = sentinelRef.current
@@ -462,8 +530,9 @@ export default function CollectionPage() {
         return prev.filter(f => !(f.filterId === filterId && f.valueId === valueId))
       }
 
-      // Find the label from shopifyFilters
-      const filter = shopifyFilters.find(f => f.id === filterId)
+      // Label/input shopifyFilters ya syntheticFilters mein se jo bhi mile
+      const all = [...shopifyFilters, ...syntheticFilters]
+      const filter = all.find(f => f.id === filterId)
       const value = filter?.values.find(v => v.id === valueId)
       const label = value?.label || valueId
 
@@ -529,7 +598,7 @@ export default function CollectionPage() {
 
         {/* Filter sidebar (desktop) + drawer (mobile) */}
         <FilterPanel
-          filters={shopifyFilters}
+          filters={[...shopifyFilters, ...syntheticFilters]}
           activeFilters={activeFilters}
           onToggle={toggleFilter}
           onClearAll={clearAllFilters}
