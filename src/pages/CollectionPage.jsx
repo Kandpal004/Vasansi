@@ -123,21 +123,21 @@ function FilterSections({ filters, activeFilters, onToggle }) {
         const isPriceRange = filter.type === 'PRICE_RANGE'
 
         return (
-          <div key={filter.id} className="border-b border-charcoal/6 last:border-0">
-            {/* Section header — chevron left, label right (like live site) */}
+          <div key={filter.id} className="border-b border-charcoal/8 last:border-0">
+            {/* Section header — label left, chevron right (live site match) */}
             <button
               onClick={() => toggle(filter.id)}
-              className="w-full flex items-center gap-2 py-5 text-left group"
+              className="w-full flex items-center justify-between py-5 text-left group"
             >
+              <span className="text-[13px] tracking-[0.1em] uppercase font-semibold text-charcoal group-hover:text-charcoal transition-colors">
+                {filter.label}
+              </span>
               <svg
-                className={`w-3 h-3 text-charcoal/40 transition-transform duration-200 flex-shrink-0 ${isOpen ? '' : '-rotate-90'}`}
-                fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}
+                className={`w-4 h-4 text-charcoal/60 transition-transform duration-200 flex-shrink-0 ${isOpen ? '' : '-rotate-90'}`}
+                fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
               </svg>
-              <span className="text-[13px] tracking-[0.08em] uppercase font-medium text-charcoal/80 group-hover:text-charcoal transition-colors">
-                {filter.label}
-              </span>
             </button>
 
             {/* Content */}
@@ -145,7 +145,7 @@ function FilterSections({ filters, activeFilters, onToggle }) {
               {isPriceRange ? (
                 <PriceSliderFilter filter={filter} activeFilters={activeFilters} onToggle={onToggle} />
               ) : (
-                <div className="space-y-0.5 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+                <div className="space-y-0.5 max-h-72 overflow-y-auto pr-2 custom-scrollbar">
                   {filter.values.map(val => {
                     const isActive = activeFilters.some(
                       af => af.filterId === filter.id && af.valueId === val.id
@@ -156,24 +156,24 @@ function FilterSections({ filters, activeFilters, onToggle }) {
                         className="flex items-center gap-3 py-2 cursor-pointer group/item"
                         onClick={() => onToggle(filter.id, val.id)}
                       >
-                        {/* Custom checkbox */}
-                        <span className={`w-[18px] h-[18px] rounded-sm border-[1.5px] flex items-center justify-center transition-all flex-shrink-0 ${
+                        {/* Custom checkbox — square outlined like live site */}
+                        <span className={`w-[16px] h-[16px] border-[1.5px] flex items-center justify-center transition-all flex-shrink-0 ${
                           isActive
                             ? 'bg-gold border-gold'
-                            : 'border-charcoal/20 group-hover/item:border-gold/60'
+                            : 'border-charcoal/30 group-hover/item:border-gold'
                         }`}>
                           {isActive && (
-                            <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+                            <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
                               <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                             </svg>
                           )}
                         </span>
-                        <span className={`text-[13px] transition-colors flex-1 ${
-                          isActive ? 'text-charcoal font-normal' : 'text-charcoal/60 font-light group-hover/item:text-charcoal/80'
+                        <span className={`text-[12px] tracking-[0.08em] uppercase flex-1 transition-colors ${
+                          isActive ? 'text-charcoal font-medium' : 'text-charcoal/75 font-light group-hover/item:text-charcoal'
                         }`}>
                           {val.label}
                         </span>
-                        <span className="text-[11px] text-charcoal/25 font-light tabular-nums">
+                        <span className="text-[12px] text-charcoal/50 font-light tabular-nums">
                           ({val.count})
                         </span>
                       </label>
