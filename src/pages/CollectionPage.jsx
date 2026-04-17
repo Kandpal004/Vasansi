@@ -591,7 +591,7 @@ export default function CollectionPage() {
         {/* Filter button — desktop + mobile (opens drawer) */}
         <button
           onClick={() => setFilterOpen(true)}
-          className="flex items-center gap-2 text-xs tracking-wider uppercase text-charcoal font-light border border-charcoal px-4 py-2 hover:bg-charcoal hover:text-white transition-colors"
+          className="flex items-center gap-2 text-xs tracking-wider uppercase text-charcoal font-semibold border-2 border-charcoal px-4 py-2 hover:bg-charcoal hover:text-white transition-colors"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
