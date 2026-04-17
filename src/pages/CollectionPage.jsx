@@ -68,7 +68,7 @@ function FilterPanel({ filters, activeFilters, onToggle, onClearAll, filterOpen,
           {activeCount > 0 && (
             <button
               onClick={onClearAll}
-              className="flex-1 border border-charcoal/20 text-charcoal text-[10px] tracking-[0.2em] uppercase py-3 hover:border-charcoal transition-colors font-light"
+              className="flex-1 border border-charcoal text-charcoal text-[10px] tracking-[0.2em] uppercase py-3 hover:bg-charcoal hover:text-white transition-colors font-light"
             >
               Clear All
             </button>
@@ -362,7 +362,7 @@ function ItemTypeTabs({ filter, activeFilters, setActiveFilters }) {
               className={`text-[10px] lg:text-xs tracking-[0.2em] uppercase px-4 lg:px-6 py-2 lg:py-2.5 border transition-all font-light ${
                 isActive
                   ? 'bg-charcoal text-white border-charcoal'
-                  : 'bg-white text-charcoal border-charcoal/20 hover:border-charcoal hover:text-charcoal'
+                  : 'bg-white text-charcoal border-charcoal hover:bg-charcoal/5'
               }`}
             >
               {val.label} <span className={isActive ? 'text-white/70' : 'text-charcoal/40'}>({val.count})</span>
@@ -591,7 +591,7 @@ export default function CollectionPage() {
         {/* Filter button — desktop + mobile (opens drawer) */}
         <button
           onClick={() => setFilterOpen(true)}
-          className="flex items-center gap-2 text-xs tracking-wider uppercase text-charcoal font-light border border-charcoal/20 px-4 py-2 hover:border-gold hover:text-gold transition-colors"
+          className="flex items-center gap-2 text-xs tracking-wider uppercase text-charcoal font-light border border-charcoal px-4 py-2 hover:bg-charcoal hover:text-white transition-colors"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
@@ -608,7 +608,7 @@ export default function CollectionPage() {
           <select
             value={sortIndex}
             onChange={e => setSortIndex(Number(e.target.value))}
-            className="text-[10px] lg:text-xs tracking-wider text-charcoal border border-charcoal/15 px-3 py-2 bg-white focus:outline-none focus:border-gold cursor-pointer font-light"
+            className="text-[10px] lg:text-xs tracking-wider text-charcoal border border-charcoal px-3 py-2 bg-white focus:outline-none focus:border-charcoal cursor-pointer font-light"
           >
             {SORT_OPTIONS.map((opt, i) => <option key={i} value={i}>{opt.label}</option>)}
           </select>
