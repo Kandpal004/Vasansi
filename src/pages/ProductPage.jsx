@@ -259,7 +259,7 @@ export default function ProductPage() {
   // ── Loading skeleton ──
   if (loading) {
     return (
-      <div className="pt-16 lg:pt-20">
+      <div className="pt-[108px] lg:pt-[108px]">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 lg:py-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10">
             <div className="lg:col-span-7">
@@ -296,7 +296,7 @@ export default function ProductPage() {
   const inStock   = variant?.availableForSale ?? product.availableForSale
 
   return (
-    <div className="pt-16 lg:pt-20 pb-6 lg:pb-16">
+    <div className="pt-[108px] lg:pt-[108px] pb-6 lg:pb-16">
 
       {/* ── Breadcrumb ── */}
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 lg:py-4">
@@ -323,7 +323,7 @@ export default function ProductPage() {
           />
 
           {/* ═══════ RIGHT — Product Info ═══════ */}
-          <div className="lg:col-span-5 lg:sticky lg:top-20 lg:self-start py-1 lg:py-2">
+          <div className="lg:col-span-5 lg:sticky lg:top-[120px] lg:self-start py-1 lg:py-2">
 
             {/* Vendor + Product Type */}
             <div className="flex items-center gap-3 mb-2">

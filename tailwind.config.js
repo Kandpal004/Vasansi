@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        charcoal: "#0F0D1A",
+        charcoal: "#AC7783",
         burgundy: "#810621",
         gold: "#ac7783",
         cream: "#F8F5F0",

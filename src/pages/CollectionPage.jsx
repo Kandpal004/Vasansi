@@ -87,7 +87,7 @@ function FilterPanel({ filters, activeFilters, onToggle, onClearAll, filterOpen,
 
       {/* Desktop sidebar */}
       <div className="hidden lg:block w-60 flex-shrink-0">
-        <div className="sticky top-20">
+        <div className="sticky top-[120px]">
           <div className="flex items-center justify-between mb-4 pb-4 border-b border-charcoal/8">
             <h3 className="font-serif text-lg text-charcoal font-light">Filters</h3>
             {activeCount > 0 && (
@@ -476,7 +476,7 @@ export default function CollectionPage() {
   const clearAllFilters = () => setActiveFilters([])
 
   return (
-    <div className="pt-16 lg:pt-16">
+    <div className="pt-[108px] lg:pt-[108px]">
       {/* Collection header */}
       <section className="relative bg-cream py-6 lg:py-10 px-4 sm:px-6 lg:px-8">
         {collection?.image?.url && (

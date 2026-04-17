@@ -87,7 +87,7 @@ export default function CategoryGrid() {
           <Link
             key={col.id}
             to={`/collections/${col.handle}`}
-            className="group relative overflow-hidden block aspect-[3/4] lg:aspect-[3/5]"
+            className="group relative overflow-hidden block aspect-[3/4] lg:aspect-square"
           >
             {imgUrl ? (
               <img

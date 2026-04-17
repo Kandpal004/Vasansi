@@ -17,19 +17,21 @@ const DEFAULT_LINKS = [
 ]
 
 const announcements = [
-  "Free Shipping on orders above ₹999",
-  "New Arrivals Every Week",
-  "Easy 15-Day Returns",
-  "Trusted by 50,000+ Customers",
-  "Exclusive Handcrafted Designs",
-  "COD Available Across India",
-  "Free Shipping on orders above ₹999",
-  "New Arrivals Every Week",
-  "Easy 15-Day Returns",
-  "Trusted by 50,000+ Customers",
-  "Exclusive Handcrafted Designs",
-  "COD Available Across India",
+  "TALK TO VASANSI'S FASHION CONSULTANTS",
+  "Call & WhatsApp at +91-9116699595",
+  "Email at reachus@vasansi.co.in",
+  "TALK TO VASANSI'S FASHION CONSULTANTS",
+  "Call & WhatsApp at +91-9116699595",
+  "Email at reachus@vasansi.co.in",
+  "TALK TO VASANSI'S FASHION CONSULTANTS",
+  "Call & WhatsApp at +91-9116699595",
+  "Email at reachus@vasansi.co.in",
 ]
+
+// Sale countdown target — yahan se change karo
+const SALE_START = new Date('2026-04-21T09:25:00').getTime()
+
+const pad = (n) => String(n).padStart(2, '0')
 
 // Parse Shopify menu items — nested structure ko clean format mein convert karo
 function parseMenu(items = []) {
@@ -96,6 +98,19 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [navLinks, setNavLinks] = useState(DEFAULT_LINKS)
   const [openMobileSub, setOpenMobileSub] = useState(null)
+  const [now, setNow] = useState(() => Date.now())
+
+  // Countdown tick — har second update
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(id)
+  }, [])
+
+  const diff = Math.max(0, SALE_START - now)
+  const days  = Math.floor(diff / 86400000)
+  const hours = Math.floor((diff % 86400000) / 3600000)
+  const mins  = Math.floor((diff % 3600000) / 60000)
+  const secs  = Math.floor((diff % 60000) / 1000)
 
   // Scroll detection — sirf homepage pe matter karta hai (transparent hero overlay)
   useEffect(() => {
@@ -124,17 +139,26 @@ export default function Header() {
 
   return (
     <>
-      {/* Announcement Bar — homepage top pe hi dikhe */}
+      {/* Announcement Bar — always fixed; scroll pe marquee hide */}
       <div
-        className={`fixed top-0 left-0 right-0 z-50 bg-charcoal overflow-hidden transition-all duration-300 ${
-          isSolid ? 'h-0' : 'h-8'
+        className={`fixed top-0 left-0 right-0 z-50 bg-[#ac7783] overflow-hidden transition-all duration-300 ${
+          isSolid ? 'h-11' : 'h-[72px]'
         }`}
       >
-        <div className="animate-marquee py-2">
+        {/* Countdown strip — hamesha visible */}
+        <div className="flex items-center justify-center gap-3 h-11 text-white text-[12px] sm:text-[15px] lg:text-[18px] tracking-[0.18em] uppercase font-light border-b border-white/20">
+          <span>Sale Starts In</span>
+          <span className="font-medium tracking-wider">
+            {pad(days)}d : {pad(hours)}h : {pad(mins)}m : {pad(secs)}s
+          </span>
+        </div>
+
+        {/* Marquee — scroll pe hide */}
+        <div className="animate-marquee py-1.5">
           {announcements.map((text, i) => (
             <span key={i} className="inline-flex items-center whitespace-nowrap">
               <span className="text-white text-xs tracking-widest uppercase font-light mx-6">{text}</span>
-              <span className="text-gold text-xs mx-2">✦</span>
+              <span className="text-white text-xs mx-2">✦</span>
             </span>
           ))}
         </div>
@@ -143,9 +167,7 @@ export default function Header() {
       {/* Navbar */}
       <nav
         className={`fixed left-0 right-0 z-40 transition-all duration-500 ${
-          isSolid
-            ? 'top-0 bg-white shadow-sm'
-            : 'top-8 bg-transparent'
+          isSolid ? 'top-11 bg-white shadow-sm' : 'top-[72px] bg-transparent'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
