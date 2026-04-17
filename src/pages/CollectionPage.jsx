@@ -39,70 +39,49 @@ function FilterPanel({ filters, activeFilters, onToggle, onClearAll, filterOpen,
   const activeCount = activeFilters.length
 
   return (
-    <>
-      {/* Mobile filter drawer */}
-      <div className={`fixed inset-0 z-50 lg:hidden ${filterOpen ? '' : 'pointer-events-none'}`}>
-        <div
-          className={`absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300 ${filterOpen ? 'opacity-100' : 'opacity-0'}`}
-          onClick={() => setFilterOpen(false)}
-        />
-        <div className={`absolute left-0 top-0 bottom-0 w-[85%] max-w-sm bg-white flex flex-col shadow-2xl transition-transform duration-300 ease-out ${filterOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-          {/* Header */}
-          <div className="flex items-center justify-between px-6 py-5 border-b border-charcoal/8">
-            <h3 className="font-serif text-lg text-charcoal font-light">
-              Filters
-              {activeCount > 0 && <span className="text-gold text-sm ml-2">({activeCount})</span>}
-            </h3>
-            <button onClick={() => setFilterOpen(false)} className="text-charcoal/40 hover:text-charcoal transition-colors">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-
-          {/* Filter sections */}
-          <div className="flex-1 overflow-y-auto px-6 py-2">
-            <FilterSections filters={filters} activeFilters={activeFilters} onToggle={onToggle} />
-          </div>
-
-          {/* Footer */}
-          <div className="border-t border-charcoal/8 px-6 py-4 flex gap-3">
-            {activeCount > 0 && (
-              <button
-                onClick={onClearAll}
-                className="flex-1 border border-charcoal/20 text-charcoal text-[10px] tracking-[0.2em] uppercase py-3 hover:border-charcoal transition-colors font-light"
-              >
-                Clear All
-              </button>
-            )}
-            <button
-              onClick={() => setFilterOpen(false)}
-              className="flex-1 bg-gold text-white text-[10px] tracking-[0.2em] uppercase py-3 font-medium"
-            >
-              Show Results
-            </button>
-          </div>
+    <div className={`fixed inset-0 z-50 ${filterOpen ? '' : 'pointer-events-none'}`}>
+      <div
+        className={`absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300 ${filterOpen ? 'opacity-100' : 'opacity-0'}`}
+        onClick={() => setFilterOpen(false)}
+      />
+      <div className={`absolute left-0 top-0 bottom-0 w-[85%] max-w-sm bg-white flex flex-col shadow-2xl transition-transform duration-300 ease-out ${filterOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-5 border-b border-charcoal/8">
+          <h3 className="font-serif text-lg text-charcoal font-light">
+            Filters
+            {activeCount > 0 && <span className="text-gold text-sm ml-2">({activeCount})</span>}
+          </h3>
+          <button onClick={() => setFilterOpen(false)} className="text-charcoal/40 hover:text-charcoal transition-colors">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
-      </div>
 
-      {/* Desktop sidebar */}
-      <div className="hidden lg:block w-60 flex-shrink-0">
-        <div className="sticky top-[120px]">
-          <div className="flex items-center justify-between mb-4 pb-4 border-b border-charcoal/8">
-            <h3 className="font-serif text-lg text-charcoal font-light">Filters</h3>
-            {activeCount > 0 && (
-              <button
-                onClick={onClearAll}
-                className="text-[10px] tracking-wider uppercase text-gold hover:text-charcoal transition-colors font-light"
-              >
-                Clear ({activeCount})
-              </button>
-            )}
-          </div>
+        {/* Filter sections */}
+        <div className="flex-1 overflow-y-auto px-6 py-2">
           <FilterSections filters={filters} activeFilters={activeFilters} onToggle={onToggle} />
         </div>
+
+        {/* Footer */}
+        <div className="border-t border-charcoal/8 px-6 py-4 flex gap-3">
+          {activeCount > 0 && (
+            <button
+              onClick={onClearAll}
+              className="flex-1 border border-charcoal/20 text-charcoal text-[10px] tracking-[0.2em] uppercase py-3 hover:border-charcoal transition-colors font-light"
+            >
+              Clear All
+            </button>
+          )}
+          <button
+            onClick={() => setFilterOpen(false)}
+            className="flex-1 bg-gold text-white text-[10px] tracking-[0.2em] uppercase py-3 font-medium"
+          >
+            Show Results
+          </button>
+        </div>
       </div>
-    </>
+    </div>
   )
 }
 
@@ -352,6 +331,49 @@ function ProductCard({ product }) {
   )
 }
 
+// ── Item Type tabs — single-select pill tabs on top of grid ──
+function ItemTypeTabs({ filter, activeFilters, setActiveFilters }) {
+  if (!filter || !filter.values?.length) return null
+
+  const handleClick = (val) => {
+    setActiveFilters(prev => {
+      const isActive = prev.some(f => f.filterId === filter.id && f.valueId === val.id)
+      // Same filter group ke baaki hata do
+      const others = prev.filter(f => f.filterId !== filter.id)
+      if (isActive) return others
+      return [...others, {
+        filterId: filter.id,
+        valueId: val.id,
+        input: val.input,
+        label: val.label,
+      }]
+    })
+  }
+
+  return (
+    <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-4 lg:pt-6">
+      <div className="flex flex-wrap items-center gap-2 lg:gap-3">
+        {filter.values.map(val => {
+          const isActive = activeFilters.some(f => f.filterId === filter.id && f.valueId === val.id)
+          return (
+            <button
+              key={val.id}
+              onClick={() => handleClick(val)}
+              className={`text-[10px] lg:text-xs tracking-[0.2em] uppercase px-4 lg:px-6 py-2 lg:py-2.5 border transition-all font-light ${
+                isActive
+                  ? 'bg-charcoal text-white border-charcoal'
+                  : 'bg-white text-charcoal border-charcoal/20 hover:border-charcoal hover:text-charcoal'
+              }`}
+            >
+              {val.label} <span className={isActive ? 'text-white/70' : 'text-charcoal/40'}>({val.count})</span>
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 function SkeletonCard() {
   return (
     <div>
@@ -566,10 +588,10 @@ export default function CollectionPage() {
 
       {/* Sort + Filter bar */}
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 lg:py-6 flex items-center justify-between border-b border-gray-100">
-        {/* Mobile filter button */}
+        {/* Filter button — desktop + mobile (opens drawer) */}
         <button
           onClick={() => setFilterOpen(true)}
-          className="lg:hidden flex items-center gap-2 text-xs tracking-wider uppercase text-charcoal font-light border border-charcoal/20 px-4 py-2 hover:border-gold hover:text-gold transition-colors"
+          className="flex items-center gap-2 text-xs tracking-wider uppercase text-charcoal font-light border border-charcoal/20 px-4 py-2 hover:border-gold hover:text-gold transition-colors"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
@@ -593,24 +615,31 @@ export default function CollectionPage() {
         </div>
       </div>
 
-      {/* Content area — sidebar + grid */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 lg:py-10 flex gap-8">
+      {/* Filter drawer — desktop + mobile */}
+      <FilterPanel
+        filters={[...shopifyFilters, ...syntheticFilters].filter(f => !/item\s*type/i.test(f.label))}
+        activeFilters={activeFilters}
+        onToggle={toggleFilter}
+        onClearAll={clearAllFilters}
+        filterOpen={filterOpen}
+        setFilterOpen={setFilterOpen}
+      />
 
-        {/* Filter sidebar (desktop) + drawer (mobile) */}
-        <FilterPanel
-          filters={[...shopifyFilters, ...syntheticFilters]}
-          activeFilters={activeFilters}
-          onToggle={toggleFilter}
-          onClearAll={clearAllFilters}
-          filterOpen={filterOpen}
-          setFilterOpen={setFilterOpen}
-        />
+      {/* Item Type tabs — single-select */}
+      <ItemTypeTabs
+        filter={[...shopifyFilters, ...syntheticFilters].find(f => /item\s*type/i.test(f.label))}
+        activeFilters={activeFilters}
+        setActiveFilters={setActiveFilters}
+      />
+
+      {/* Content area — grid (full width) */}
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 lg:py-10">
 
         {/* Products */}
-        <div className="flex-1 min-w-0">
+        <div className="min-w-0">
           <ActiveFilterChips activeFilters={activeFilters} onRemove={removeFilter} onClearAll={clearAllFilters} />
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-5">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-2 lg:gap-4">
             {loading
               ? [...Array(PAGE_SIZE)].map((_, i) => <SkeletonCard key={i} />)
               : products.map(p => <ProductCard key={p.id} product={p} />)
