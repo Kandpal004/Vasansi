@@ -258,15 +258,21 @@ export default function ProductPage() {
     }
   }
 
-  // Sticky mobile CTA — jab inline CTA scroll se out of view ho
+  // Sticky mobile CTA — jaise hi inline CTA viewport ke top se upar chali jaye
   useEffect(() => {
-    if (!ctaRef.current) return
-    const observer = new IntersectionObserver(
-      ([entry]) => setShowStickyCTA(!entry.isIntersecting),
-      { threshold: 0, rootMargin: '0px 0px -40px 0px' }
-    )
-    observer.observe(ctaRef.current)
-    return () => observer.disconnect()
+    const check = () => {
+      if (!ctaRef.current) return
+      const rect = ctaRef.current.getBoundingClientRect()
+      // inline CTA ka bottom viewport se upar gaya = sticky dikhao
+      setShowStickyCTA(rect.bottom < 0)
+    }
+    window.addEventListener('scroll', check, { passive: true })
+    window.addEventListener('resize', check)
+    check()
+    return () => {
+      window.removeEventListener('scroll', check)
+      window.removeEventListener('resize', check)
+    }
   }, [product])
 
   // ── Loading skeleton ──
