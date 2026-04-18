@@ -224,7 +224,16 @@ export default function ProductPage() {
     shopifyFetch(PRODUCT_QUERY, { handle }).then(data => {
       if (data?.product) {
         setProduct(data.product)
-        const first = data.product.variants.nodes.find(v => v.availableForSale) || data.product.variants.nodes[0]
+        // MTO override: agar product ke tags mein _rtsmto + mto-active dono hon
+        // to Ready-To-Ship variants ignore karo, Made-To-Order default pick karo
+        const tags = (data.product.tags || []).map(t => t.toLowerCase())
+        const mtoOnly = tags.includes('_rtsmto') && tags.includes('mto-active')
+        const pool = mtoOnly
+          ? data.product.variants.nodes.filter(v =>
+              !v.selectedOptions.some(o => o.name.toLowerCase() === 'item type' && /ready.?to.?ship/i.test(o.value))
+            )
+          : data.product.variants.nodes
+        const first = pool.find(v => v.availableForSale) || pool[0] || data.product.variants.nodes[0]
         if (first) {
           const d = {}
           first.selectedOptions.forEach(o => { d[o.name] = o.value })
@@ -396,36 +405,49 @@ export default function ProductPage() {
             </div>
 
             {/* ── Options (Size, Color, Item Type) ── */}
-            {product.options.map(option => {
-              if (option.name === 'Title' && option.values.length === 1 && option.values[0] === 'Default Title') return null
-              const selected = selectedOptions[option.name]
+            {(() => {
+              const tags = (product.tags || []).map(t => t.toLowerCase())
+              const mtoOnly = tags.includes('_rtsmto') && tags.includes('mto-active')
 
-              return (
-                <div key={option.id} className="mb-5">
-                  <p className="text-[11px] tracking-[0.15em] uppercase text-charcoal font-medium mb-2.5">
-                    {option.name}: <span className="text-gold font-light normal-case tracking-normal ml-1">{selected}</span>
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 lg:gap-2">
-                    {option.values.map(value => {
-                      const isActive = selected === value
-                      return (
-                        <button
-                          key={value}
-                          onClick={() => setSelectedOptions(prev => ({ ...prev, [option.name]: value }))}
-                          className={`min-w-[40px] px-3 lg:px-4 py-2 lg:py-2.5 text-[11px] tracking-wider uppercase font-light border transition-all duration-200 ${
-                            isActive
-                              ? 'bg-gold text-white border-gold shadow-sm'
-                              : 'bg-white text-charcoal border-charcoal/12 hover:border-gold hover:text-gold'
-                          }`}
-                        >
-                          {value}
-                        </button>
-                      )
-                    })}
+              return product.options.map(option => {
+                if (option.name === 'Title' && option.values.length === 1 && option.values[0] === 'Default Title') return null
+                const selected = selectedOptions[option.name]
+
+                // MTO override: Item Type mein Ready-To-Ship hide karo
+                const isItemType = option.name.toLowerCase() === 'item type'
+                const values = (mtoOnly && isItemType)
+                  ? option.values.filter(v => !/ready.?to.?ship/i.test(v))
+                  : option.values
+
+                if (values.length === 0) return null
+
+                return (
+                  <div key={option.id} className="mb-5">
+                    <p className="text-[11px] tracking-[0.15em] uppercase text-charcoal font-medium mb-2.5">
+                      {option.name}: <span className="text-gold font-light normal-case tracking-normal ml-1">{selected}</span>
+                    </p>
+                    <div className="flex flex-wrap gap-1.5 lg:gap-2">
+                      {values.map(value => {
+                        const isActive = selected === value
+                        return (
+                          <button
+                            key={value}
+                            onClick={() => setSelectedOptions(prev => ({ ...prev, [option.name]: value }))}
+                            className={`min-w-[40px] px-3 lg:px-4 py-2 lg:py-2.5 text-[11px] tracking-wider uppercase font-light border transition-all duration-200 ${
+                              isActive
+                                ? 'bg-gold text-white border-gold shadow-sm'
+                                : 'bg-white text-charcoal border-charcoal/12 hover:border-gold hover:text-gold'
+                            }`}
+                          >
+                            {value}
+                          </button>
+                        )
+                      })}
+                    </div>
                   </div>
-                </div>
-              )
-            })}
+                )
+              })
+            })()}
 
             {/* Quantity */}
             <div className="mb-6">
