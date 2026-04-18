@@ -224,14 +224,15 @@ export default function ProductPage() {
     shopifyFetch(PRODUCT_QUERY, { handle }).then(data => {
       if (data?.product) {
         setProduct(data.product)
-        // MTO override: agar product ke tags mein _rtsmto + mto-active dono hon
-        // to Ready-To-Ship variants ignore karo, Made-To-Order default pick karo
+        // _rtsmto flag: pehla order = Ready-To-Ship, aage ke sab = Made-To-Order
+        //   tags mein _rtsmto + mto-active NAHI → sirf RTS dikhao (pehla order pending)
+        //   tags mein _rtsmto + mto-active hai    → sirf MTO dikhao (pehla order ho chuka)
         const tags = (data.product.tags || []).map(t => t.toLowerCase())
-        const mtoOnly = tags.includes('_rtsmto') && tags.includes('mto-active')
-        const pool = mtoOnly
-          ? data.product.variants.nodes.filter(v =>
-              !v.selectedOptions.some(o => o.name.toLowerCase() === 'item type' && /ready.?to.?ship/i.test(o.value))
-            )
+        const hasRtsmto = tags.includes('_rtsmto')
+        const mtoActive = tags.includes('mto-active')
+        const isRTS = (v) => v.selectedOptions.some(o => o.name.toLowerCase() === 'item type' && /ready.?to.?ship/i.test(o.value))
+        const pool = hasRtsmto
+          ? data.product.variants.nodes.filter(v => mtoActive ? !isRTS(v) : isRTS(v))
           : data.product.variants.nodes
         const first = pool.find(v => v.availableForSale) || pool[0] || data.product.variants.nodes[0]
         if (first) {
@@ -407,17 +408,23 @@ export default function ProductPage() {
             {/* ── Options (Size, Color, Item Type) ── */}
             {(() => {
               const tags = (product.tags || []).map(t => t.toLowerCase())
-              const mtoOnly = tags.includes('_rtsmto') && tags.includes('mto-active')
+              const hasRtsmto = tags.includes('_rtsmto')
+              const mtoActive = tags.includes('mto-active')
 
               return product.options.map(option => {
                 if (option.name === 'Title' && option.values.length === 1 && option.values[0] === 'Default Title') return null
                 const selected = selectedOptions[option.name]
 
-                // MTO override: Item Type mein Ready-To-Ship hide karo
+                // _rtsmto flag logic:
+                //   pehla order pending (mto-active nahi) → sirf Ready-To-Ship dikhao
+                //   pehla order ho gaya (mto-active hai)  → sirf Made-To-Order dikhao
                 const isItemType = option.name.toLowerCase() === 'item type'
-                const values = (mtoOnly && isItemType)
-                  ? option.values.filter(v => !/ready.?to.?ship/i.test(v))
-                  : option.values
+                let values = option.values
+                if (hasRtsmto && isItemType) {
+                  values = mtoActive
+                    ? option.values.filter(v => !/ready.?to.?ship/i.test(v))
+                    : option.values.filter(v =>  /ready.?to.?ship/i.test(v))
+                }
 
                 if (values.length === 0) return null
 
