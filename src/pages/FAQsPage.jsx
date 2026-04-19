@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useMeta } from '../lib/meta'
+import { useShop } from '../lib/ShopContext'
 
 const FAQ_SECTIONS = [
   {
@@ -112,6 +114,12 @@ function FAQItem({ q, a }) {
 }
 
 export default function FAQsPage() {
+  const shop = useShop()
+  useMeta({
+    title: shop?.name ? `FAQs — ${shop.name}` : '',
+    description: shop?.description || shop?.brand?.shortDescription || '',
+    url: shop?.primaryDomain?.url ? `${shop.primaryDomain.url}/faqs` : undefined,
+  })
   return (
     <div className="pt-[108px] lg:pt-[108px] pb-16 lg:pb-24 bg-white">
 

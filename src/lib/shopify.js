@@ -113,6 +113,7 @@ export const PRODUCT_QUERY = `
       productType
       tags
       availableForSale
+      seo { title description }
       priceRange {
         minVariantPrice { amount currencyCode }
         maxVariantPrice { amount currencyCode }
@@ -271,6 +272,7 @@ export const COLLECTION_PAGE_QUERY = `
       id
       title
       description
+      seo { title description }
       image {
         url(transform: { maxWidth: 2000, maxHeight: 800, crop: CENTER })
         altText
@@ -377,6 +379,7 @@ export const PAGE_QUERY = `
     page(handle: $handle) {
       id
       title
+      handle
       body
       bodySummary
       seo { title description }
@@ -395,6 +398,27 @@ export const SHOP_POLICIES_QUERY = `
       refundPolicy { id title body handle }
       termsOfService { id title body handle }
       subscriptionPolicy { id title body handle }
+    }
+  }
+`
+
+// ── Shop info — brand meta for <title>, description, OG tags ──
+export const SHOP_INFO_QUERY = `
+  query ShopInfo {
+    shop {
+      name
+      description
+      primaryDomain { url host }
+      brand {
+        shortDescription
+        slogan
+        logo {
+          image { url altText }
+        }
+        coverImage {
+          image { url altText }
+        }
+      }
     }
   }
 `

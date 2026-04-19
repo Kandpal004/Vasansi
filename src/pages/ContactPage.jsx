@@ -1,8 +1,16 @@
 import { useState } from 'react'
+import { useMeta } from '../lib/meta'
+import { useShop } from '../lib/ShopContext'
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
+  const shop = useShop()
+  useMeta({
+    title: shop?.name ? `Contact — ${shop.name}` : '',
+    description: shop?.description || shop?.brand?.shortDescription || '',
+    url: shop?.primaryDomain?.url ? `${shop.primaryDomain.url}/contact` : undefined,
+  })
 
   const handleSubmit = (e) => {
     e.preventDefault()

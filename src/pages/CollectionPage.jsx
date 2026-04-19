@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { shopifyFetch, COLLECTION_PAGE_QUERY, COLLECTION_FACETS_QUERY } from '../lib/shopify'
+import { useMeta, pickSeo } from '../lib/meta'
+import { useShop } from '../lib/ShopContext'
 
 const PAGE_SIZE = 12
 
@@ -567,6 +569,16 @@ export default function CollectionPage() {
   }
 
   const clearAllFilters = () => setActiveFilters([])
+
+  // Collection meta — sab Shopify se (collection.seo, collection.title, etc.)
+  const shop = useShop()
+  const colSeo = pickSeo(collection)
+  useMeta({
+    title: colSeo.title ? `${colSeo.title} — ${shop?.name || ''}`.trim().replace(/— $/, '') : (shop?.name || ''),
+    description: colSeo.description,
+    image: collection?.image?.url,
+    url: shop?.primaryDomain?.url ? `${shop.primaryDomain.url}/collections/${handle}` : undefined,
+  })
 
   return (
     <div className="pt-[108px] lg:pt-[108px]">

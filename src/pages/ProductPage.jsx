@@ -2,6 +2,8 @@ import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { shopifyFetch, PRODUCT_QUERY, RELATED_PRODUCTS_QUERY } from '../lib/shopify'
 import { useCart } from '../lib/CartContext'
+import { useMeta, pickSeo } from '../lib/meta'
+import { useShop } from '../lib/ShopContext'
 
 function formatPrice(amount, currencyCode = 'INR') {
   return new Intl.NumberFormat('en-IN', {
@@ -259,6 +261,17 @@ export default function ProductPage() {
     const imgs = product.images?.nodes || []
     return imgs.length ? imgs : (product.featuredImage ? [product.featuredImage] : [])
   }, [product])
+
+  // Product page meta — sab Shopify se (product.seo, product.title, etc.)
+  const shop = useShop()
+  const productSeo = pickSeo(product)
+  useMeta({
+    title: productSeo.title ? `${productSeo.title} — ${shop?.name || ''}`.trim().replace(/— $/, '') : (shop?.name || ''),
+    description: productSeo.description,
+    image: product?.featuredImage?.url,
+    url: shop?.primaryDomain?.url ? `${shop.primaryDomain.url}/products/${handle}` : undefined,
+    type: 'product',
+  })
 
   const handleAddToCart = async () => {
     if (variant) {

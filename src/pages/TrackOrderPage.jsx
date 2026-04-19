@@ -1,8 +1,16 @@
 import { useState } from 'react'
+import { useMeta } from '../lib/meta'
+import { useShop } from '../lib/ShopContext'
 
 export default function TrackOrderPage() {
   const [orderNum, setOrderNum] = useState('')
   const [email, setEmail] = useState('')
+  const shop = useShop()
+  useMeta({
+    title: shop?.name ? `Track Your Order — ${shop.name}` : '',
+    description: shop?.description || shop?.brand?.shortDescription || '',
+    url: shop?.primaryDomain?.url ? `${shop.primaryDomain.url}/track-order` : undefined,
+  })
 
   const handleSubmit = (e) => {
     e.preventDefault()

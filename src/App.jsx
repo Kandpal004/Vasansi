@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import { CartProvider } from './lib/CartContext'
+import { ShopProvider } from './lib/ShopContext'
 import Header from './components/Header'
 import CartDrawer from './components/CartDrawer'
 import Footer from './components/Footer'
@@ -15,6 +16,7 @@ import OurStoryPage from './pages/OurStoryPage'
 
 export default function App() {
   return (
+    <ShopProvider>
     <CartProvider>
       <div className="min-h-screen bg-white font-sans flex flex-col">
         <Header />
@@ -40,5 +42,6 @@ export default function App() {
         <Footer />
       </div>
     </CartProvider>
+    </ShopProvider>
   )
 }

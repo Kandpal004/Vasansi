@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom'
+import { useMeta } from '../lib/meta'
+import { useShop } from '../lib/ShopContext'
 
 // Images — live Vasansi Shopify CDN se
 const IMG_HERO    = 'https://www.vasansi.com/cdn/shop/files/Untitled_design_16_1920x.png'
@@ -9,6 +11,13 @@ const IMG_ARTISAN = 'https://www.vasansi.com/cdn/shop/files/vlcsnap-2020-08-22-1
 const IMG_FINAL   = 'https://www.vasansi.com/cdn/shop/files/IMG_20200226_211213_1080x.jpg'
 
 export default function OurStoryPage() {
+  const shop = useShop()
+  useMeta({
+    title: shop?.name ? `Our Story — ${shop.name}` : '',
+    description: shop?.description || shop?.brand?.shortDescription || '',
+    url: shop?.primaryDomain?.url ? `${shop.primaryDomain.url}/pages/our-story` : undefined,
+    type: 'article',
+  })
   return (
     <div className="pt-[108px] lg:pt-[108px] bg-white">
 

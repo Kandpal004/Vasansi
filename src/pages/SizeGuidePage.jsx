@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useMeta } from '../lib/meta'
+import { useShop } from '../lib/ShopContext'
 
 const SIZE_CHARTS = {
   kurta: {
@@ -53,6 +55,12 @@ const TIPS = [
 export default function SizeGuidePage() {
   const [active, setActive] = useState('kurta')
   const chart = SIZE_CHARTS[active]
+  const shop = useShop()
+  useMeta({
+    title: shop?.name ? `Size Guide — ${shop.name}` : '',
+    description: shop?.description || shop?.brand?.shortDescription || '',
+    url: shop?.primaryDomain?.url ? `${shop.primaryDomain.url}/size-guide` : undefined,
+  })
 
   return (
     <div className="pt-[108px] lg:pt-[108px] pb-16 lg:pb-24 bg-white">

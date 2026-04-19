@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { shopifyFetch, PAGE_QUERY, SHOP_POLICIES_QUERY } from '../lib/shopify'
+import { useMeta, pickSeo } from '../lib/meta'
+import { useShop } from '../lib/ShopContext'
 
 const POLICY_KEYS = {
   'privacy-policy': 'privacyPolicy',
@@ -36,6 +38,16 @@ export default function StaticPage({ isPolicy = false }) {
         .finally(() => setLoading(false))
     }
   }, [handle, isPolicy])
+
+  // Page meta — Shopify page.seo / policy.title se
+  const shop = useShop()
+  const pageSeo = pickSeo(page)
+  useMeta({
+    title: pageSeo.title ? `${pageSeo.title} — ${shop?.name || ''}`.trim().replace(/— $/, '') : (shop?.name || ''),
+    description: pageSeo.description,
+    url: shop?.primaryDomain?.url ? `${shop.primaryDomain.url}/${isPolicy ? 'policies' : 'pages'}/${handle}` : undefined,
+    type: 'article',
+  })
 
   return (
     <div className="pt-[108px] lg:pt-[108px] pb-16 lg:pb-24 bg-white">
