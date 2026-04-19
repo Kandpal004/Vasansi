@@ -15,6 +15,7 @@ export default {
       fontFamily: {
         serif: ["Proza Libre", "Georgia", "serif"],
         sans: ["Jost", "system-ui", "sans-serif"],
+        poppins: ["Poppins", "system-ui", "sans-serif"],
       },
     },
   },

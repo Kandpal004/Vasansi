@@ -4,6 +4,7 @@ import { ShopProvider } from './lib/ShopContext'
 import Header from './components/Header'
 import CartDrawer from './components/CartDrawer'
 import Footer from './components/Footer'
+import WhatsAppWidget from './components/WhatsAppWidget'
 import HomePage from './pages/HomePage'
 import CollectionPage from './pages/CollectionPage'
 import ProductPage from './pages/ProductPage'
@@ -24,8 +25,16 @@ export default function App() {
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/collections/:handle" element={<CollectionPage />} />
+
+            {/* Product routes — support both Shopify-style URLs so marketing
+                / Google / WhatsApp / ad links continue to work:
+                  /products/:handle                                 (clean)
+                  /collections/:collectionHandle/products/:handle   (Shopify-style) */}
             <Route path="/products/:handle" element={<ProductPage />} />
+            <Route path="/collections/:collectionHandle/products/:handle" element={<ProductPage />} />
+
+            {/* Collection listing */}
+            <Route path="/collections/:handle" element={<CollectionPage />} />
 
             {/* Custom premium pages */}
             <Route path="/contact" element={<ContactPage />} />
@@ -40,6 +49,7 @@ export default function App() {
           </Routes>
         </main>
         <Footer />
+        <WhatsAppWidget />
       </div>
     </CartProvider>
     </ShopProvider>

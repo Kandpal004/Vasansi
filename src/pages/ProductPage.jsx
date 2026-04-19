@@ -4,6 +4,8 @@ import { shopifyFetch, PRODUCT_QUERY, RELATED_PRODUCTS_QUERY } from '../lib/shop
 import { useCart } from '../lib/CartContext'
 import { useMeta, pickSeo } from '../lib/meta'
 import { useShop } from '../lib/ShopContext'
+import { getFeaturesFor } from '../lib/productFeatures'
+import VideoModal from '../components/VideoModal'
 
 function formatPrice(amount, currencyCode = 'INR') {
   return new Intl.NumberFormat('en-IN', {
@@ -215,6 +217,7 @@ export default function ProductPage() {
   const [addedToCart, setAddedToCart] = useState(false)
   const [showStickyCTA, setShowStickyCTA] = useState(false)
   const ctaRef = useRef(null)
+  const [videoOpen, setVideoOpen] = useState(false)
 
   useEffect(() => {
     setLoading(true)
@@ -514,7 +517,57 @@ export default function ProductPage() {
                 </svg>
                 Add to Wishlist
               </button>
+
+              {/* ── Per-SKU extras: View Similar + Video Call ── */}
+              {(() => {
+                const features = getFeaturesFor(product.handle)
+                if (!features) return null
+                const waText = encodeURIComponent(`Hi Vasansi, I'd like a video call for "${product.title}".`)
+                const waUrl = `https://wa.me/${features.videoCallNumber}?text=${waText}`
+
+                return (
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {/* View Similar — click to open video */}
+                    <button
+                      onClick={() => setVideoOpen(true)}
+                      className="flex items-center justify-center gap-2 border-2 border-charcoal text-charcoal text-[10px] lg:text-[11px] tracking-[0.18em] uppercase font-semibold py-3 px-2 hover:bg-charcoal hover:text-white transition-colors group whitespace-nowrap"
+                    >
+                      <svg className="w-4 h-4 flex-shrink-0 transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" />
+                      </svg>
+                      <span>View Similar → Click Here</span>
+                    </button>
+
+                    {/* Video Call — WhatsApp */}
+                    <a
+                      href={waUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 bg-[#25D366] border-2 border-[#25D366] text-white text-[10px] lg:text-[11px] tracking-[0.18em] uppercase font-semibold py-3 px-2 hover:bg-[#128C7E] hover:border-[#128C7E] transition-colors whitespace-nowrap"
+                    >
+                      <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z" />
+                      </svg>
+                      <span>Video Call with Us</span>
+                    </a>
+                  </div>
+                )
+              })()}
             </div>
+
+            {/* Video modal */}
+            {(() => {
+              const features = getFeaturesFor(product.handle)
+              if (!features) return null
+              return (
+                <VideoModal
+                  open={videoOpen}
+                  onClose={() => setVideoOpen(false)}
+                  videoUrl={features.videoUrl}
+                  title="Similar Styles"
+                />
+              )
+            })()}
 
             {/* ── Trust Badges ── */}
             <div className="grid grid-cols-3 gap-3 py-5 mb-4 border-y border-charcoal/6">
