@@ -70,7 +70,7 @@ export default function Hero() {
             }`}
           />
           {/* Dark overlay for text readability */}
-          <div className={`absolute inset-0 bg-black/45 transition-opacity duration-700 ${
+          <div className={`absolute inset-0 bg-black/20 transition-opacity duration-700 ${
             imgReady ? 'opacity-100' : 'opacity-0'
           }`} />
         </>

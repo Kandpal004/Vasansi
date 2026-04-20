@@ -16,7 +16,7 @@ export default function HomePage() {
       <CategorySlider />
       <Hero />
       <FeaturedProducts />
-      <AprilEdit />
+      {/* <AprilEdit /> — abhi ke liye hidden, wapas enable karna ho to uncomment */}
       <CategoryGrid />
       <PromoBanners />
       <ConsultantBanner />

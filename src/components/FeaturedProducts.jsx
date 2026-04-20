@@ -152,12 +152,12 @@ export default function FeaturedProducts() {
   }, [])
 
   return (
-    <section className="py-6 lg:py-14 bg-cream">
+    <section className="py-4 lg:py-8 bg-cream">
       <div className="max-w-8xl mx-auto px-3 sm:px-6 lg:px-8">
 
         {/* Section header */}
-        <div className="text-center mb-5 lg:mb-10">
-          <h2 className="font-serif text-xl lg:text-3xl font-light text-charcoal uppercase tracking-wide">
+        <div className="text-center mb-3 lg:mb-6">
+          <h2 className="font-serif text-lg lg:text-[22px] font-light text-charcoal uppercase tracking-wide">
             Shop All
           </h2>
         </div>
@@ -171,7 +171,7 @@ export default function FeaturedProducts() {
         </div>
 
         {/* VIEW ALL button */}
-        <div className="text-center mt-8 lg:mt-14">
+        <div className="text-center mt-8 lg:mt-5">
           <a
             href={`/collections/${COLLECTION_HANDLE}`}
             className="inline-block bg-gold text-white text-[10px] lg:text-xs tracking-[0.25em] uppercase font-medium px-8 lg:px-12 py-3 lg:py-4 hover:bg-charcoal transition-all duration-300"

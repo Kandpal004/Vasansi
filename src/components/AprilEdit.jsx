@@ -38,8 +38,8 @@ export default function AprilEdit() {
 
   if (loading) {
     return (
-      <section className="py-6 lg:py-12 px-3 sm:px-6 lg:px-8 max-w-8xl mx-auto">
-        <div className="text-center mb-5 lg:mb-10">
+      <section className="py-4 lg:py-8 px-3 sm:px-6 lg:px-8 max-w-8xl mx-auto">
+        <div className="text-center mb-3 lg:mb-6">
           <div className="h-8 w-44 bg-gray-100 rounded mx-auto" />
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 lg:gap-4">
@@ -54,9 +54,9 @@ export default function AprilEdit() {
   if (!collections.length) return null
 
   return (
-    <section className="py-6 lg:py-12 px-3 sm:px-6 lg:px-8 max-w-8xl mx-auto">
-      <div className="text-center mb-5 lg:mb-10">
-        <h2 className="font-serif text-xl lg:text-3xl font-light text-charcoal uppercase">
+    <section className="py-4 lg:py-8 px-3 sm:px-6 lg:px-8 max-w-8xl mx-auto">
+      <div className="text-center mb-3 lg:mb-6">
+        <h2 className="font-serif text-lg lg:text-[28px] font-light text-charcoal uppercase">
           April Edit
         </h2>
       </div>

@@ -65,11 +65,11 @@ export default function CategoryGrid() {
   }
 
   return (
-    <section className="py-6 lg:py-12 px-3 sm:px-6 lg:px-8 max-w-8xl mx-auto">
+    <section className="py-4 lg:py-8 px-3 sm:px-6 lg:px-8 max-w-8xl mx-auto">
 
       {/* Section header */}
-      <div className="text-center mb-5 lg:mb-10">
-        <h2 className="font-serif text-xl lg:text-3xl font-light text-charcoal uppercase">
+      <div className="text-center mb-3 lg:mb-6">
+        <h2 className="font-serif text-lg lg:text-[22px] font-light text-charcoal uppercase">
           Shop by Category
         </h2>
       </div>
