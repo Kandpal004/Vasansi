@@ -4,7 +4,7 @@ import { shopifyFetch, COLLECTION_PRODUCTS_QUERY } from '../lib/shopify'
 
 // ── YE CHANGE KARO jab doosri collection dikhani ho ──
 const COLLECTION_HANDLE = 'shop-all'
-const PRODUCTS_TO_SHOW  = 8   // 4 columns × 2 rows = 8
+const PRODUCTS_TO_SHOW  = 10  // 5 columns × 2 rows = 10
 
 function formatPrice(amount, currencyCode = 'INR') {
   return new Intl.NumberFormat('en-IN', {
@@ -163,7 +163,7 @@ export default function FeaturedProducts() {
         </div>
 
         {/* Products grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-2 lg:gap-4">
           {loading
             ? [...Array(PRODUCTS_TO_SHOW)].map((_, i) => <SkeletonCard key={i} />)
             : products.map(p => <ProductCard key={p.id} product={p} />)

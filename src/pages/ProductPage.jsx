@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { shopifyFetch, PRODUCT_QUERY, RELATED_PRODUCTS_QUERY } from '../lib/shopify'
 import { useCart } from '../lib/CartContext'
+import { useWishlist } from '../lib/WishlistContext'
 import { useMeta, pickSeo } from '../lib/meta'
 import { useShop } from '../lib/ShopContext'
 import { getFeaturesFor } from '../lib/productFeatures'
@@ -127,76 +128,80 @@ function ImageGallery({ images, activeImg, setActiveImg, hasDiscount, discount, 
 
   return (
     <div className="lg:col-span-7">
-      {/* Main image — swipeable */}
-      <div
-        ref={containerRef}
-        onTouchStart={onTouchStart}
-        onTouchEnd={onTouchEnd}
-        className="relative bg-cream overflow-hidden aspect-[4/5] mb-2 lg:mb-3 cursor-grab active:cursor-grabbing select-none"
-      >
-        <img
-          key={activeImg}
-          src={images[activeImg]?.url}
-          alt={images[activeImg]?.altText || title}
-          className="absolute inset-0 w-full h-full object-cover object-top"
-          draggable={false}
-          style={{ animation: 'fadeIn 0.25s ease-out' }}
-        />
+      {/* Desktop: thumbs LEFT (vertical) | main RIGHT; Mobile: stacked */}
+      <div className="flex flex-col lg:flex-row lg:gap-3">
 
-        {/* Discount badge */}
-        {hasDiscount && (
-          <span className="absolute top-3 left-3 lg:top-4 lg:left-4 bg-gold text-white text-[10px] lg:text-xs tracking-wider px-3 py-1 rounded-full font-light shadow-sm">
-            {discount}% Off
-          </span>
-        )}
-
-        {/* Navigation arrows */}
+        {/* Thumbnails — desktop vertical strip on left */}
         {images.length > 1 && (
-          <>
-            <button
-              onClick={() => goTo(activeImg - 1)}
-              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 lg:w-10 lg:h-10 bg-white/80 hover:bg-white flex items-center justify-center text-charcoal hover:text-charcoal transition-all shadow-sm"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>
-            </button>
-            <button
-              onClick={() => goTo(activeImg + 1)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 lg:w-10 lg:h-10 bg-white/80 hover:bg-white flex items-center justify-center text-charcoal hover:text-charcoal transition-all shadow-sm"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
-            </button>
-          </>
+          <div
+            ref={thumbContainerRef}
+            className="order-2 lg:order-1 flex lg:flex-col gap-1.5 lg:gap-2 overflow-x-auto lg:overflow-y-auto lg:max-h-[640px] pb-1 lg:pb-0 scrollbar-hide lg:w-20 flex-shrink-0 mt-2 lg:mt-0"
+          >
+            {images.map((img, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveImg(i)}
+                className={`relative flex-shrink-0 w-14 h-16 lg:w-20 lg:h-24 bg-cream overflow-hidden transition-all duration-200 ${
+                  activeImg === i
+                    ? 'ring-2 ring-gold ring-offset-1 opacity-100'
+                    : 'opacity-50 hover:opacity-90'
+                }`}
+              >
+                <img src={img.url} alt="" className="absolute inset-0 w-full h-full object-cover" draggable={false} />
+              </button>
+            ))}
+          </div>
         )}
 
-        {/* Image counter */}
-        {images.length > 1 && (
-          <span className="absolute bottom-3 right-3 bg-black/40 text-white text-[10px] tracking-wider px-2 py-1 rounded-sm font-light">
-            {activeImg + 1} / {images.length}
-          </span>
-        )}
-      </div>
-
-      {/* Thumbnails — mobile (horizontal scroll) + desktop (grid) */}
-      {images.length > 1 && (
+        {/* Main image — swipeable */}
         <div
-          ref={thumbContainerRef}
-          className="flex lg:grid lg:grid-cols-6 gap-1.5 lg:gap-2 overflow-x-auto pb-1 lg:pb-0 scrollbar-hide"
+          ref={containerRef}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+          className="order-1 lg:order-2 relative flex-1 bg-cream overflow-hidden aspect-[4/5] cursor-grab active:cursor-grabbing select-none"
         >
-          {images.map((img, i) => (
-            <button
-              key={i}
-              onClick={() => setActiveImg(i)}
-              className={`relative flex-shrink-0 w-14 h-16 lg:w-auto lg:h-auto bg-cream overflow-hidden transition-all duration-200 aspect-square ${
-                activeImg === i
-                  ? 'ring-2 ring-gold ring-offset-1 opacity-100'
-                  : 'opacity-40 hover:opacity-80'
-              }`}
-            >
-              <img src={img.url} alt="" className="absolute inset-0 w-full h-full object-cover" draggable={false} />
-            </button>
-          ))}
+          <img
+            key={activeImg}
+            src={images[activeImg]?.url}
+            alt={images[activeImg]?.altText || title}
+            className="absolute inset-0 w-full h-full object-cover object-top"
+            draggable={false}
+            style={{ animation: 'fadeIn 0.25s ease-out' }}
+          />
+
+          {/* Discount badge */}
+          {hasDiscount && (
+            <span className="absolute top-3 left-3 lg:top-4 lg:left-4 bg-gold text-white text-[10px] lg:text-xs tracking-wider px-3 py-1 rounded-full font-light shadow-sm">
+              {discount}% Off
+            </span>
+          )}
+
+          {/* Navigation arrows */}
+          {images.length > 1 && (
+            <>
+              <button
+                onClick={() => goTo(activeImg - 1)}
+                className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 lg:w-10 lg:h-10 bg-white/80 hover:bg-white flex items-center justify-center text-charcoal hover:text-charcoal transition-all shadow-sm"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>
+              </button>
+              <button
+                onClick={() => goTo(activeImg + 1)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 lg:w-10 lg:h-10 bg-white/80 hover:bg-white flex items-center justify-center text-charcoal hover:text-charcoal transition-all shadow-sm"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
+              </button>
+            </>
+          )}
+
+          {/* Image counter */}
+          {images.length > 1 && (
+            <span className="absolute bottom-3 right-3 bg-black/40 text-white text-[10px] tracking-wider px-2 py-1 rounded-sm font-light">
+              {activeImg + 1} / {images.length}
+            </span>
+          )}
         </div>
-      )}
+      </div>
     </div>
   )
 }
@@ -207,6 +212,7 @@ function ImageGallery({ images, activeImg, setActiveImg, hasDiscount, discount, 
 export default function ProductPage() {
   const { handle } = useParams()
   const { addToCart, buyNow, loading: cartLoading } = useCart()
+  const { has: inWishlist, toggle: toggleWishlist } = useWishlist()
 
   const [product, setProduct]       = useState(null)
   const [loading, setLoading]       = useState(true)
@@ -413,27 +419,22 @@ export default function ProductPage() {
             {/* Divider */}
             <div className="h-px bg-charcoal/6 mb-5" />
 
-            {/* Availability */}
-            <div className="flex items-center gap-2 mb-5">
+            {/* Availability — abhi ke liye comment out */}
+            {/* <div className="flex items-center gap-2 mb-5">
               <span className={`w-1.5 h-1.5 rounded-full ${inStock ? 'bg-emerald-500' : 'bg-red-400'}`} />
               <span className="text-[11px] tracking-wider uppercase text-charcoal font-light">
                 {inStock ? 'In Stock — Ready to Ship' : 'Currently Unavailable'}
               </span>
-            </div>
+            </div> */}
 
-            {/* ── Options (Size, Color, Item Type) ── */}
+            {/* ── Options (Blouse Type, Item Type, Size) + Quantity — all in one row ── */}
             {(() => {
               const tags = (product.tags || []).map(t => t.toLowerCase())
               const hasRtsmto = tags.includes('_rtsmto')
               const mtoActive = tags.includes('mto-active')
 
-              return product.options.map(option => {
+              const renderable = product.options.map(option => {
                 if (option.name === 'Title' && option.values.length === 1 && option.values[0] === 'Default Title') return null
-                const selected = selectedOptions[option.name]
-
-                // _rtsmto flag logic:
-                //   pehla order pending (mto-active nahi) → sirf Ready-To-Ship dikhao
-                //   pehla order ho gaya (mto-active hai)  → sirf Made-To-Order dikhao
                 const isItemType = option.name.toLowerCase() === 'item type'
                 let values = option.values
                 if (hasRtsmto && isItemType) {
@@ -441,46 +442,53 @@ export default function ProductPage() {
                     ? option.values.filter(v => !/ready.?to.?ship/i.test(v))
                     : option.values.filter(v =>  /ready.?to.?ship/i.test(v))
                 }
-
                 if (values.length === 0) return null
+                return { option, values }
+              }).filter(Boolean)
 
-                return (
-                  <div key={option.id} className="mb-5">
-                    <p className="text-[11px] tracking-[0.15em] uppercase text-charcoal font-medium mb-2.5">
-                      {option.name}: <span className="text-gold font-light normal-case tracking-normal ml-1">{selected}</span>
-                    </p>
-                    <div className="flex flex-wrap gap-1.5 lg:gap-2">
-                      {values.map(value => {
-                        const isActive = selected === value
-                        return (
-                          <button
-                            key={value}
-                            onClick={() => setSelectedOptions(prev => ({ ...prev, [option.name]: value }))}
-                            className={`min-w-[40px] px-3 lg:px-4 py-2 lg:py-2.5 text-[11px] tracking-wider uppercase font-light border transition-all duration-200 ${
-                              isActive
-                                ? 'bg-gold text-white border-gold shadow-sm'
-                                : 'bg-white text-charcoal border-charcoal/12 hover:border-gold hover:text-gold'
-                            }`}
-                          >
-                            {value}
-                          </button>
-                        )
-                      })}
+              return (
+                <div className="flex flex-wrap items-start gap-x-6 gap-y-4 mb-6">
+                  {renderable.map(({ option, values }) => {
+                    const selected = selectedOptions[option.name]
+                    return (
+                      <div key={option.id}>
+                        <p className="text-[11px] tracking-[0.15em] uppercase text-charcoal font-medium mb-2">
+                          {option.name}: <span className="text-gold font-light normal-case tracking-normal ml-1">{selected}</span>
+                        </p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {values.map(value => {
+                            const isActive = selected === value
+                            return (
+                              <button
+                                key={value}
+                                onClick={() => setSelectedOptions(prev => ({ ...prev, [option.name]: value }))}
+                                className={`min-w-[40px] px-3 lg:px-4 py-2 lg:py-2.5 text-[11px] tracking-wider uppercase font-light border transition-all duration-200 ${
+                                  isActive
+                                    ? 'bg-gold text-white border-gold shadow-sm'
+                                    : 'bg-white text-charcoal border-charcoal/12 hover:border-gold hover:text-gold'
+                                }`}
+                              >
+                                {value}
+                              </button>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )
+                  })}
+
+                  {/* Quantity — same row me */}
+                  <div>
+                    <p className="text-[11px] tracking-[0.15em] uppercase text-charcoal font-medium mb-2">Quantity</p>
+                    <div className="inline-flex items-center border border-charcoal/12">
+                      <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="w-10 h-10 text-charcoal text-base hover:bg-cream transition-colors">−</button>
+                      <span className="w-10 text-center text-sm font-medium text-charcoal border-x border-charcoal/12">{quantity}</span>
+                      <button onClick={() => setQuantity(q => q + 1)} className="w-10 h-10 text-charcoal text-base hover:bg-cream transition-colors">+</button>
                     </div>
                   </div>
-                )
-              })
+                </div>
+              )
             })()}
-
-            {/* Quantity */}
-            <div className="mb-6">
-              <p className="text-[11px] tracking-[0.15em] uppercase text-charcoal font-medium mb-2.5">Quantity</p>
-              <div className="inline-flex items-center border border-charcoal/12">
-                <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="w-10 h-10 text-charcoal text-base hover:bg-cream transition-colors">−</button>
-                <span className="w-10 text-center text-sm font-medium text-charcoal border-x border-charcoal/12">{quantity}</span>
-                <button onClick={() => setQuantity(q => q + 1)} className="w-10 h-10 text-charcoal text-base hover:bg-cream transition-colors">+</button>
-              </div>
-            </div>
 
             {/* ── CTA Buttons ── */}
             <div className="mb-6">
@@ -511,12 +519,47 @@ export default function ProductPage() {
               </div>
 
               {/* Wishlist */}
-              <button className="w-full flex items-center justify-center gap-2 text-[11px] tracking-wider uppercase text-charcoal py-3 mt-2.5 hover:text-gold transition-colors font-light">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                </svg>
-                Add to Wishlist
-              </button>
+              {(() => {
+                const saved = inWishlist(product.id)
+                return (
+                  <button
+                    onClick={() => toggleWishlist(product)}
+                    className={`w-full flex items-center justify-center gap-2 text-[11px] tracking-wider uppercase py-3 mt-2.5 transition-colors font-medium ${
+                      saved ? 'text-gold' : 'text-charcoal hover:text-gold'
+                    }`}
+                    aria-pressed={saved}
+                  >
+                    <svg className="w-4 h-4" fill={saved ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24" strokeWidth={saved ? 0 : 1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                    </svg>
+                    {saved ? 'Saved to Wishlist' : 'Add to Wishlist'}
+                  </button>
+                )
+              })()}
+
+              {/* ── Dispatch badge — RTS vs MTO auto-detected ── */}
+              {(() => {
+                const tags = (product.tags || []).map(t => t.toLowerCase())
+                const isRTSOrder = tags.includes('_rtsmto') && !tags.includes('mto-active')
+                const dispatchDays = isRTSOrder ? '3-5' : '28'
+                return (
+                  <div className="mt-5 flex items-center justify-center gap-3 py-3 border-y border-charcoal/10">
+                    <svg className="w-7 h-7 text-gold flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+                    </svg>
+                    <p className="text-sm text-charcoal font-medium tracking-wide">
+                      Product Dispatches Within <span className="text-gold font-semibold">{dispatchDays} Working Days</span>
+                    </p>
+                  </div>
+                )
+              })()}
+
+              {/* ── Product description — prominent (above accordion) ── */}
+              {product.descriptionHtml && (
+                <div className="mt-5 text-[13px] lg:text-sm text-charcoal font-light leading-[1.9] prose-content"
+                  dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+                />
+              )}
 
               {/* ── Per-SKU extras: View Similar + Video Call ── */}
               {(() => {

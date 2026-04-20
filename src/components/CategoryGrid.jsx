@@ -5,13 +5,14 @@ import { shopifyFetch, buildCollectionsByHandleQuery } from '../lib/shopify'
 // ── YE HANDLES CHANGE KARO — jo collections homepage pe dikhani hain ──
 // Shopify Admin → Collections → URL mein handle milega
 // e.g. vasansi.com/collections/smart-casuals → handle = "smart-casuals"
+// Same order as live vasansi.com homepage "Shop by Category" section
 const FEATURED_HANDLES = [
-  'daily-wear',
-  'gowns-and-anarkali-dresses',
-  'designer-and-party-wear-sarees',
-  'shop-all',
-  'party-wear-sharara-suits',
-  'women-kurti-sets',
+  'daily-wear',                       // Smart Casuals
+  'gowns-and-anarkali-dresses',       // Anarkalis
+  'designer-and-party-wear-sarees',   // Sarees
+  'party-wear-and-bridal-lehengas',   // Lehengas
+  'unstitched-sets',                  // Unstitched Sets by Varuna
+  'women-kurti-sets',                 // Fusion Wear
 ]
 
 // Fallback gradients — agar collection ki image nahi hai

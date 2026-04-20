@@ -7,12 +7,26 @@ import { useShop } from '../lib/ShopContext'
 const PAGE_SIZE = 12
 
 const SORT_OPTIONS = [
+  // "Featured" = MANUAL — Shopify theme ki "Featured" dropdown bhi
+  // sort_by=manual use karti hai (verified via /products.json endpoint).
+  // Admin mein collection pe merchant ki manual ordering follow hoti hai.
   { label: 'Featured',          sortKey: 'MANUAL',       reverse: false },
   { label: 'Price: Low → High', sortKey: 'PRICE',        reverse: false },
   { label: 'Price: High → Low', sortKey: 'PRICE',        reverse: true  },
-  { label: 'Newest First',      sortKey: 'CREATED',      reverse: true  },
+  { label: 'Date, new to old',  sortKey: 'CREATED',      reverse: true  },
+  { label: 'Date, old to new',  sortKey: 'CREATED',      reverse: false },
   { label: 'Best Selling',      sortKey: 'BEST_SELLING', reverse: false },
+  { label: 'A → Z',             sortKey: 'TITLE',        reverse: false },
+  { label: 'Z → A',             sortKey: 'TITLE',        reverse: true  },
 ]
+
+// Per-collection default sort override — jab kisi collection ka default
+// "Featured" (index 0, COLLECTION_DEFAULT) se alag chahiye toh yahan map karo.
+// Default "Featured" merchant ke Shopify Admin ke sort config se
+// automatically match karta hai, isliye normally override zaroori nahi.
+//
+// Example: { 'sale': 1 } → Sale collection default "Price: Low → High"
+const COLLECTION_DEFAULT_SORT = {}
 
 const TAG_BADGES = [
   { match: ['ready to ship', 'ready-to-ship'], label: 'Ready to Ship' },
@@ -405,6 +419,18 @@ export default function CollectionPage() {
   const stateRef = useRef({ hasMore, loadingMore, endCursor, sortIndex, handle, activeFilters })
   stateRef.current = { hasMore, loadingMore, endCursor, sortIndex, handle, activeFilters }
 
+  // Per-handle first-visit pe default sort apply karo (shop-all, daily-wear etc.)
+  // User ne baad mein sort change kiya toh override nahi karenge.
+  const sortSyncedFor = useRef(null)
+  useEffect(() => {
+    if (sortSyncedFor.current === handle) return
+    sortSyncedFor.current = handle
+    const desired = COLLECTION_DEFAULT_SORT[handle]
+    if (typeof desired === 'number' && desired !== sortIndex) {
+      setSortIndex(desired)
+    }
+  }, [handle])
+
   // Build Shopify filter input from activeFilters
   const buildFilterInput = (afs) => {
     return afs.map(af => JSON.parse(af.input))
@@ -651,7 +677,7 @@ export default function CollectionPage() {
         <div className="min-w-0">
           <ActiveFilterChips activeFilters={activeFilters} onRemove={removeFilter} onClearAll={clearAllFilters} />
 
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-2 lg:gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4">
             {loading
               ? [...Array(PAGE_SIZE)].map((_, i) => <SkeletonCard key={i} />)
               : products.map(p => <ProductCard key={p.id} product={p} />)

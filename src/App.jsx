@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import { CartProvider } from './lib/CartContext'
 import { ShopProvider } from './lib/ShopContext'
+import { WishlistProvider } from './lib/WishlistContext'
 import Header from './components/Header'
 import CartDrawer from './components/CartDrawer'
 import Footer from './components/Footer'
@@ -14,10 +15,12 @@ import SizeGuidePage from './pages/SizeGuidePage'
 import TrackOrderPage from './pages/TrackOrderPage'
 import FAQsPage from './pages/FAQsPage'
 import OurStoryPage from './pages/OurStoryPage'
+import WishlistPage from './pages/WishlistPage'
 
 export default function App() {
   return (
     <ShopProvider>
+    <WishlistProvider>
     <CartProvider>
       <div className="min-h-screen bg-white font-sans flex flex-col">
         <Header />
@@ -41,6 +44,7 @@ export default function App() {
             <Route path="/size-guide" element={<SizeGuidePage />} />
             <Route path="/track-order" element={<TrackOrderPage />} />
             <Route path="/faqs" element={<FAQsPage />} />
+            <Route path="/wishlist" element={<WishlistPage />} />
 
             {/* Shopify CMS pages + policies */}
             <Route path="/pages/our-story" element={<OurStoryPage />} />
@@ -52,6 +56,7 @@ export default function App() {
         <WhatsAppWidget />
       </div>
     </CartProvider>
+    </WishlistProvider>
     </ShopProvider>
   )
 }

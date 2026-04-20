@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { shopifyFetch, MAIN_MENU_QUERY, toRelativeUrl } from '../lib/shopify'
 import { useCart } from '../lib/CartContext'
+import { useWishlist } from '../lib/WishlistContext'
 import SearchDrawer from './SearchDrawer'
 
 // Shopify menu handle — agar tumne naam change kiya hai to yahan update karo
@@ -94,6 +95,7 @@ export default function Header() {
   const location = useLocation()
   const isHomePage = location.pathname === '/'
   const { totalQuantity, setDrawerOpen } = useCart()
+  const { count: wishlistCount } = useWishlist()
 
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -122,7 +124,11 @@ export default function Header() {
   }, [])
 
   // Inner pages pe hamesha solid white header (dark hero nahi hai wahan)
-  const isSolid = scrolled || !isHomePage
+  // Navbar hamesha solid white — CategorySlider hero se pehle hai, isliye
+  // transparent-over-hero effect useful nahi (logo invisible hota tha).
+  // Announcement bar ka collapse on-scroll alag rakha.
+  const isSolid = true
+  const announcementCollapsed = scrolled
 
   // Shopify se menu fetch
   useEffect(() => {
@@ -144,7 +150,7 @@ export default function Header() {
       {/* Announcement Bar — always fixed; scroll pe marquee hide */}
       <div
         className={`fixed top-0 left-0 right-0 z-50 bg-[#ac7783] overflow-hidden transition-all duration-300 ${
-          isSolid ? 'h-11' : 'h-[72px]'
+          announcementCollapsed ? 'h-11' : 'h-[72px]'
         }`}
       >
         {/* Countdown strip — hamesha visible */}
@@ -166,10 +172,10 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Navbar */}
+      {/* Navbar — hamesha solid white */}
       <nav
-        className={`fixed left-0 right-0 z-40 transition-all duration-500 ${
-          isSolid ? 'top-11 bg-white shadow-sm' : 'top-[72px] bg-transparent'
+        className={`fixed left-0 right-0 z-40 bg-white shadow-sm transition-all duration-500 ${
+          announcementCollapsed ? 'top-11' : 'top-[72px]'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -206,9 +212,18 @@ export default function Header() {
               >
                 <SearchIcon />
               </button>
-              <button className={`${hoverColor} transition-colors hidden sm:block`} aria-label="Wishlist">
+              <Link
+                to="/wishlist"
+                className={`${hoverColor} transition-colors relative hidden sm:block`}
+                aria-label="Wishlist"
+              >
                 <HeartIcon />
-              </button>
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-2 -right-2 w-4 h-4 bg-gold text-white text-[10px] rounded-full flex items-center justify-center font-medium">
+                    {wishlistCount}
+                  </span>
+                )}
+              </Link>
               <button
                 onClick={() => setDrawerOpen(true)}
                 className={`${hoverColor} transition-colors relative`}
@@ -307,9 +322,9 @@ export default function Header() {
                 <button className="flex items-center gap-2 text-xs tracking-wider text-charcoal hover:text-burgundy transition-colors">
                   <SearchIcon /> Search
                 </button>
-                <button className="flex items-center gap-2 text-xs tracking-wider text-charcoal hover:text-burgundy transition-colors">
-                  <HeartIcon /> Wishlist
-                </button>
+                <Link to="/wishlist" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 text-xs tracking-wider text-charcoal hover:text-burgundy transition-colors">
+                  <HeartIcon /> Wishlist {wishlistCount > 0 && <span className="text-gold">({wishlistCount})</span>}
+                </Link>
               </div>
               <p className="text-xs text-gray-400 tracking-wider">📞 91166-99595</p>
             </div>
