@@ -1,6 +1,7 @@
 import Hero from '../components/Hero'
 import CategorySlider from '../components/CategorySlider'
 import CategoryGrid from '../components/CategoryGrid'
+import AprilEdit from '../components/AprilEdit'
 import FeaturedProducts from '../components/FeaturedProducts'
 import PromoBanners from '../components/PromoBanners'
 import ConsultantBanner from '../components/ConsultantBanner'
@@ -14,8 +15,9 @@ export default function HomePage() {
     <>
       <CategorySlider />
       <Hero />
-      <CategoryGrid />
       <FeaturedProducts />
+      <AprilEdit />
+      <CategoryGrid />
       <PromoBanners />
       <ConsultantBanner />
     </>

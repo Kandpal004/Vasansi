@@ -3,8 +3,9 @@ import { shopifyFetch, HERO_BANNER_QUERY } from '../lib/shopify'
 
 // ── Ye values Shopify se same rakho — loading ke waqt bhi same text dikhe ──
 const DEFAULTS = {
+  overtext: "Don't Miss!",
   heading:  'Sale Of The Year',
-  subtext:  'Our Bigest',
+  subtext:  'Our Biggest',
   ctaText:  'Shop Now',
   ctaLink:  'https://www.vasansi.com/collections/shop-all',
   imageUrl: null,
@@ -14,6 +15,7 @@ function parseBanner(shopData) {
   if (!shopData?.shop) return null
   const s = shopData.shop
   return {
+    overtext: s.overtext?.value || DEFAULTS.overtext,
     heading:  s.heading?.value  || DEFAULTS.heading,
     subtext:  s.subtext?.value  || DEFAULTS.subtext,
     ctaText:  s.ctaText?.value  || DEFAULTS.ctaText,
@@ -36,6 +38,7 @@ export default function Hero() {
       .catch(() => {})
   }, [])
 
+  const overtext = banner?.overtext || DEFAULTS.overtext
   const heading  = banner?.heading  || DEFAULTS.heading
   const subtext  = banner?.subtext  || DEFAULTS.subtext
   const ctaText  = banner?.ctaText  || DEFAULTS.ctaText
@@ -81,10 +84,11 @@ export default function Hero() {
       {/* ── Content — hamesha visible, koi flash nahi ── */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
       
-      <p className="animate-fade-up-2 text-sm lg:text-lg font-light tracking-wide max-w-md text-white mx-auto mb-1 leading-relaxed uppercase">
-          {subtext}
+      <p className="animate-fade-up-2 text-xs lg:text-sm font-light tracking-[0.25em] text-white mx-auto mb-2 lg:mb-3 uppercase">
+          {overtext}
         </p>
-        <h1 className="animate-fade-up-1 font-serif text-3xl sm:text-5xl lg:text-8xl font-light text-white leading-[1.05] mb-6 lg:mb-8 uppercase">
+
+        <h1 className="animate-fade-up-1 font-serif text-3xl sm:text-5xl lg:text-8xl font-light text-white leading-[1.05] mb-3 lg:mb-4 uppercase">
           {headingLines.map((line, i) => (
             <span key={i}>
               {line}
@@ -93,7 +97,11 @@ export default function Hero() {
           ))}
         </h1>
 
-        
+        <p className="animate-fade-up-2 text-sm lg:text-lg font-light tracking-wide max-w-md text-white mx-auto mb-6 lg:mb-8 leading-relaxed uppercase">
+          {subtext}
+        </p>
+
+
 
         {/* Sirf EK CTA — Shopify se */}
         <div className="animate-fade-up-3">

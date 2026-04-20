@@ -127,6 +127,7 @@ export function CartProvider({ children }) {
   // Checkout — existing cart ka checkoutUrl pe redirect
   const goToCheckout = useCallback(() => {
     if (cart?.checkoutUrl) {
+      console.log('[Checkout] Redirecting to:', cart.checkoutUrl)
       window.location.href = cart.checkoutUrl
     }
   }, [cart])

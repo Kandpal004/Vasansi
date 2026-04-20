@@ -31,7 +31,7 @@ const announcements = [
 ]
 
 // Sale countdown target — yahan se change karo
-const SALE_START = new Date('2026-04-21T09:25:00').getTime()
+const SALE_START = new Date('2026-04-21T12:00:00').getTime()
 
 const pad = (n) => String(n).padStart(2, '0')
 
@@ -157,7 +157,7 @@ export default function Header() {
         <div className="flex items-center justify-center gap-3 h-11 text-white text-[12px] sm:text-[15px] lg:text-[18px] tracking-[0.18em] uppercase font-light border-b border-white/20">
           <span>Sale Starts In</span>
           <span className="font-medium tracking-wider">
-            {pad(days)}d : {pad(hours)}h : {pad(mins)}m : {pad(secs)}s
+            {days > 0 && `${pad(days)}d : `}{pad(hours)}h : {pad(mins)}m : {pad(secs)}s
           </span>
         </div>
 

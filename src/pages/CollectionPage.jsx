@@ -328,7 +328,7 @@ function ProductCard({ product }) {
           <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200" />
         )}
         {tagBadge ? (
-          <span className="absolute top-2 right-2 bg-gold text-white text-[9px] lg:text-[10px] tracking-wider px-2 lg:px-3 py-0.5 lg:py-1 rounded-full font-light shadow-sm">{tagBadge.label}</span>
+          <span className="absolute top-0 right-0 bg-gold text-white text-[12px] tracking-wider capitalize px-3 py-1 font-light shadow-sm">{tagBadge.label}</span>
         ) : hasDiscount ? (
           <span className="absolute top-2 right-2 bg-gold text-white text-[9px] lg:text-[10px] tracking-wider px-2 lg:px-3 py-0.5 lg:py-1 rounded-full font-light shadow-sm">{discount}% Off</span>
         ) : null}
@@ -608,17 +608,11 @@ export default function CollectionPage() {
 
   return (
     <div className="pt-[108px] lg:pt-[108px]">
-      {/* Collection header */}
+      {/* Collection header — banner image abhi hide hai */}
       <section className="relative bg-cream py-6 lg:py-10 px-4 sm:px-6 lg:px-8">
-        {collection?.image?.url && (
-          <>
-            <img src={collection.image.url} alt={collection.image.altText || collection.title} className="absolute inset-0 w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-black/45" />
-          </>
-        )}
         <div className="relative max-w-4xl mx-auto text-center">
-          <p className={`text-[10px] tracking-[0.3em] uppercase font-light mb-2 ${collection?.image ? 'text-white/80' : 'text-charcoal'}`}>Collection</p>
-          <h1 className={`font-serif text-xl lg:text-4xl font-light uppercase tracking-wide ${collection?.image ? 'text-white' : 'text-charcoal'}`}>
+          <p className="text-[10px] tracking-[0.3em] uppercase font-light mb-2 text-charcoal">Collection</p>
+          <h1 className="font-serif text-xl lg:text-4xl font-light uppercase tracking-wide text-charcoal">
             {loading ? 'Loading...' : collection?.title || 'Collection'}
           </h1>
         </div>

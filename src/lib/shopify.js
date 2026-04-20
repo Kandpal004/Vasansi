@@ -493,6 +493,9 @@ export const HERO_BANNER_QUERY = `
       heading: metafield(namespace: "custom", key: "hero_heading") {
         value
       }
+      overtext: metafield(namespace: "custom", key: "hero_overtext") {
+        value
+      }
       subtext: metafield(namespace: "custom", key: "hero_subtext") {
         value
       }
